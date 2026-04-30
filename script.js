@@ -111,7 +111,7 @@ function submitBooking(e) {
   };
   
   // Send email
-  emailjs.send("service_z9c3rur", "template_os99snq", emailParams)
+  emailjs.send("service_aay4edu", "template_os99snq", emailParams)
     .then(function(response) {
       console.log('Email sent successfully!', response.status, response.text);
       alert('Thank you! Your free demo has been booked. We will send you a confirmation email shortly.');
