@@ -176,14 +176,15 @@
 }
 
 .cora-message-content {
-   max-width: 280px;
-   padding: 10px 14px;
-   border-radius: 12px;
-   word-wrap: break-word;
-   font-size: 12px;
-   line-height: 1.5;
-   animation: slideInMessage 0.3s ease both;
-   text-align: left;
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.6;
+    animation: slideInMessage 0.3s ease both;
+    text-align: left;
+    clear: both;
 }
 
 @keyframes slideInMessage {

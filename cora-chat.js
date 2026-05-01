@@ -209,16 +209,23 @@ class CORAChat {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
   
-  formatMessageContent(content) {
-    // Replace URLs with clickable links
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    let formatted = content.replace(urlRegex, '<a href="$1" target="_blank" class="cora-link">$1</a>');
-    
-    // Replace line breaks
-    formatted = formatted.replace(/\n/g, '<br>');
-    
-    return `<p>${formatted}</p>`;
-  }
+    formatMessageContent(content) {
+        // Replace URLs with clickable links
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        let formatted = content.replace(urlRegex, '<a href="$1" target="_blank" class="cora-link">$1</a>');
+        
+        // Also convert relative links in the PDF directory to absolute links
+        const pdfUrlRegex = /(\\/PDF\\\/[^\s]*)/g;
+        formatted = formatted.replace(pdfUrlRegex, (match) => {
+            const absoluteUrl = window.location.origin + match;
+            return `<a href="${absoluteUrl}" target="_blank" class="cora-link">${match}</a>`;
+        });
+        
+        // Replace line breaks
+        formatted = formatted.replace(/\n/g, '<br>');
+        
+        return `<p>${formatted}</p>`;
+    }
   
   addTypingIndicator() {
     const messagesContainer = document.getElementById('cora-messages');
