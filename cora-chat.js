@@ -13,6 +13,8 @@ class CORAChat {
     
     this.isOpen = false;
     this.isWaitingForResponse = false;
+    this.hasTrackedOpen = false;
+    this.hasTrackedMessage = false;
     
     this.init();
   }
@@ -115,6 +117,12 @@ class CORAChat {
         widget.style.display = 'flex';
         toggleBtn.style.display = 'none';
         document.getElementById('cora-input').focus();
+        
+        // Track Meta Pixel Event when opened for the first time
+        if (typeof fbq === 'function' && !this.hasTrackedOpen) {
+          fbq('trackCustom', 'OpenChatbot');
+          this.hasTrackedOpen = true;
+        }
       } else {
         widget.style.display = 'none';
         toggleBtn.style.display = 'flex';
@@ -151,6 +159,12 @@ class CORAChat {
     const message = input.value.trim();
     
     if (!message || this.isWaitingForResponse) return;
+    
+    // Track Meta Pixel Event when sending first message
+    if (typeof fbq === 'function' && !this.hasTrackedMessage) {
+      fbq('track', 'Contact', { content_name: 'Chatbot Message' });
+      this.hasTrackedMessage = true;
+    }
     
     // Add user message to chat
     this.addMessage(message, 'user');

@@ -78,6 +78,11 @@ function openBookingModal(e) {
   e.preventDefault();
   document.getElementById('bookingModal').classList.add('active');
   document.body.style.overflow = 'hidden';
+  
+  // Track Meta Pixel Event
+  if (typeof fbq === 'function') {
+    fbq('trackCustom', 'OpenBookingModal');
+  }
 }
 
 function closeBookingModal() {
@@ -114,6 +119,13 @@ function submitBooking(e) {
   emailjs.send("service_aay4edu", "template_os99snq", emailParams)
     .then(function(response) {
       console.log('Email sent successfully!', response.status, response.text);
+      
+      // Track Meta Pixel Event for Lead Generation
+      if (typeof fbq === 'function') {
+        fbq('track', 'Lead', { content_name: 'Free Demo Booking' });
+        fbq('track', 'Schedule');
+      }
+      
       alert('Thank you! Your free demo has been booked. We will send you a confirmation email shortly.');
       closeBookingModal();
       e.target.reset();

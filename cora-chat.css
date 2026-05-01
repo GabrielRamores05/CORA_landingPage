@@ -393,78 +393,35 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   #cora-chat-widget {
-    bottom: 16px;
-    right: 16px;
-    left: 16px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 99999;
   }
   
   .cora-chat-widget {
     width: 100%;
-    height: 500px;
+    height: 100dvh;
+    max-height: 100vh;
     max-width: 100vw;
-    border-radius: 12px;
+    border-radius: 0;
   }
   
   .cora-message-content {
-    max-width: 220px !important;
+    max-width: 85% !important;
+    font-size: 14px !important;
   }
   
   .cora-chat-toggle {
-    bottom: 16px;
-    right: 16px;
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
   }
-}
 
-@media (max-width: 480px) {
-   .cora-chat-widget {
-     height: calc(100vh - 100px);
-     max-height: 90vh;
-   }
-   
-   .cora-message-content {
-     max-width: 160px !important;
-     font-size: 11px;
-   }
-   
-   .cora-chat-header-info h3 {
-     font-size: 14px;
-   }
-   
-   .cora-chat-header-info p {
-     font-size: 10px;
-   }
-   
-   .cora-chat-avatar img {
-     width: 20px !important;
-     height: 20px !important;
-   }
- }
- 
-@media (max-width: 600px) {
-   .cora-message-content {
-     font-size: 12px;
-   }
-   
-   .cora-chat-header-info h3 {
-     font-size: 15px;
-   }
-   
-   .cora-chat-header-info p {
-     font-size: 11px;
-   }
- }
-   
-   .cora-chat-header-info h3 {
-     font-size: 15px;
-   }
-   
-   .cora-chat-header-info p {
-     font-size: 11px;
-   }
- }
+  .cora-chat-input {
+    font-size: 16px; /* Prevents iOS auto-zoom on input focus */
+  }
 }
 
 /* Print Styles */
