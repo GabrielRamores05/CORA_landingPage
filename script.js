@@ -1,4 +1,4 @@
-// Intersection Observer for scroll animations - Sharper timing
+// Intersection Observer for scroll animations
 const observerOptions = {
   threshold: 0.15,
   rootMargin: '0px 0px -30px 0px'
@@ -15,44 +15,116 @@ const observer = new IntersectionObserver((entries) => {
 // Helper function to extract filename from full image path
 function getImageKey(src) {
   try {
-    // Create a temporary anchor element to parse URL
     const url = new URL(src, window.location.origin);
     const filename = url.pathname.split('/').pop();
     return 'images/' + filename;
   } catch (e) {
-    // Fallback: extract using regex
     const match = src.match(/([^\/\\]+\.(jpg|jpeg|png|gif|webp))$/i);
     return match ? 'images/' + match[1] : src;
   }
 }
 
-// Observe all animated elements with faster, snappier staggered delays
+// === ANIMATED COUNTERS ===
+function animateCounters() {
+  const counters = document.querySelectorAll('.trust-number');
+  counters.forEach(counter => {
+    if (counter.dataset.animated) return;
+    const target = parseInt(counter.dataset.target);
+    const duration = 1800;
+    const start = performance.now();
+    counter.dataset.animated = 'true';
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      counter.textContent = Math.floor(target * eased);
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        counter.textContent = target;
+      }
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounters();
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+// === HAMBURGER MENU ===
+function setupHamburger() {
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  if (!hamburger || !navLinks) return;
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
+
+  // Close on link click
+  navLinks.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+    }
+  });
+}
+
+// === MAIN INIT ===
 document.addEventListener('DOMContentLoaded', () => {
+  // Feature cards scroll animation
   const featureCards = document.querySelectorAll('.feature-card');
   featureCards.forEach((card, index) => {
     card.style.transitionDelay = `${index * 0.05}s`;
     observer.observe(card);
   });
 
-  const events = document.querySelectorAll('.event-card');
-  events.forEach((event, index) => {
-    event.style.transitionDelay = `${index * 0.03}s`;
-    observer.observe(event);
+  // Event cards
+  document.querySelectorAll('.event-card').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.03}s`;
+    observer.observe(el);
   });
 
-  const marketingCards = document.querySelectorAll('.marketing-card');
-  marketingCards.forEach((card, index) => {
-    card.style.transitionDelay = `${index * 0.03}s`;
-    observer.observe(card);
+  // Marketing cards
+  document.querySelectorAll('.marketing-card').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.03}s`;
+    observer.observe(el);
   });
 
-  const onboardingCards = document.querySelectorAll('.onboarding-card');
-  onboardingCards.forEach((card, index) => {
-    card.style.transitionDelay = `${index * 0.06}s`;
-    observer.observe(card);
+  // Onboarding cards
+  document.querySelectorAll('.onboarding-card').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.06}s`;
+    observer.observe(el);
   });
 
-  // Navbar shadow on scroll with improved gradient
+  // Cost cards + transform items + onboarding steps
+  document.querySelectorAll('.animate-on-scroll').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.05}s`;
+    observer.observe(el);
+  });
+
+  // Trust bar counter animation
+  const trustBar = document.getElementById('trust-bar');
+  if (trustBar) counterObserver.observe(trustBar);
+
+  // Navbar shadow on scroll
   const navbar = document.querySelector('.navbar');
   window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
@@ -63,11 +135,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Booking modal outside click
-  document.getElementById('bookingModal').addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
-      closeBookingModal();
-    }
-  });
+  const bookingModal = document.getElementById('bookingModal');
+  if (bookingModal) {
+    bookingModal.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        closeBookingModal();
+      }
+    });
+  }
+
+  // Setup hamburger menu
+  setupHamburger();
 
   // Image click handlers
   setupImageClickHandlers();
@@ -78,8 +156,6 @@ function openBookingModal(e) {
   e.preventDefault();
   document.getElementById('bookingModal').classList.add('active');
   document.body.style.overflow = 'hidden';
-  
-  // Track Meta Pixel Event
   if (typeof fbq === 'function') {
     fbq('trackCustom', 'OpenBookingModal');
   }
@@ -92,19 +168,11 @@ function closeBookingModal() {
 
 function submitBooking(e) {
   e.preventDefault();
-  
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
-  
-  // EmailJS Configuration - Replace with your actual values
-  const serviceID = 'YOUR_SERVICE_ID'; // Get from EmailJS dashboard
-  const templateID = 'YOUR_TEMPLATE_ID'; // Create email template in EmailJS
-  const publicKey = 'YOUR_PUBLIC_KEY'; // Get from EmailJS dashboard
-  
-  // Initialize EmailJS
+
   emailjs.init("wU74bNn0Kht8Sa4J4");
-  
-  // Prepare email parameters - match your EmailJS template variables
+
   const emailParams = {
     from_name: document.getElementById("name").value,
     from_email: document.getElementById("email").value,
@@ -114,18 +182,14 @@ function submitBooking(e) {
     questions: document.getElementById("questions").value,
     to_email: 'edgepoint.solutions.inc@gmail.com'
   };
-  
-  // Send email
+
   emailjs.send("service_aay4edu", "template_os99snq", emailParams)
     .then(function(response) {
       console.log('Email sent successfully!', response.status, response.text);
-      
-      // Track Meta Pixel Event for Lead Generation
       if (typeof fbq === 'function') {
         fbq('track', 'Lead', { content_name: 'Free Demo Booking' });
         fbq('track', 'Schedule');
       }
-      
       alert('Thank you! Your free demo has been booked. We will send you a confirmation email shortly.');
       closeBookingModal();
       e.target.reset();
@@ -145,7 +209,6 @@ document.addEventListener('keydown', (e) => {
 
 // Lightbox Functions
 const imageData = {
-  // Hero/Onboarding images
   'images/Onboarding_SEMCO1.jpg': {
     title: 'SEMCO Onboarding Session',
     desc: 'A valuable session with SEMCO as we navigate CORA system. A process shared with a heart. Thanks to Mam Jess and Nina. Mabuhay ang SEMCO!!!!'
@@ -154,7 +217,6 @@ const imageData = {
     title: 'Digital Automation Training',
     desc: 'Learn how CORA can help your cooperative in digital automation'
   },
-  // Event images
   'images/Event_COOPdayCamNorte1.jpg': {
     title: 'Cooperative Day Celebration - Camarines Norte',
     desc: 'CORA showcased at the Cooperative Day event, demonstrating how technology transforms cooperative operations.'
@@ -179,12 +241,10 @@ const imageData = {
     title: 'Exhibition Booth - FACCS',
     desc: 'CORA exhibition booth attracting interest from cooperatives nationwide.'
   },
-  // Online demo
   'images/Online_onlineDemo1.jpg': {
     title: 'Online Demo Session',
     desc: 'Remote demo session allowing cooperatives from anywhere to join and see CORA in action.'
   },
-  // Marketing posters
   'images/posterPortrait1.jpg': {
     title: 'Member Testimonials',
     desc: 'Real feedback from cooperative members who have experienced the benefits of CORA.'
@@ -213,86 +273,58 @@ const imageData = {
 
 function openLightbox(imgSrc, title, desc) {
   const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxTitle = document.getElementById('lightbox-title');
-  const lightboxDesc = document.getElementById('lightbox-desc');
-  
-  lightboxImg.src = imgSrc;
-  lightboxTitle.textContent = title;
-  lightboxDesc.textContent = desc;
-  
+  document.getElementById('lightbox-img').src = imgSrc;
+  document.getElementById('lightbox-title').textContent = title;
+  document.getElementById('lightbox-desc').textContent = desc;
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function closeLightbox() {
-  const lightbox = document.getElementById('lightbox');
-  lightbox.classList.remove('active');
+  document.getElementById('lightbox').classList.remove('active');
   document.body.style.overflow = '';
 }
 
 function setupImageClickHandlers() {
-  // Helper to get description for an image
   function getImageDescription(imgElement, fallbackTitle) {
-    const src = imgElement.src;
-    const key = getImageKey(src);
-    
-    if (imageData[key]) {
-      return imageData[key];
-    }
-    
-    // Fallback: use card title/desc or default
-    return {
-      title: fallbackTitle || 'Image',
-      desc: 'Click to view image'
-    };
+    const key = getImageKey(imgElement.src);
+    if (imageData[key]) return imageData[key];
+    return { title: fallbackTitle || 'Image', desc: 'Click to view image' };
   }
 
-  // Hero images
   document.querySelectorAll('.hero-img-card').forEach(card => {
     card.addEventListener('click', function() {
       const img = this.querySelector('img');
       const label = this.querySelector('.hero-img-label');
-      const fallbackTitle = label ? label.textContent : 'Image';
-      const data = getImageDescription(img, fallbackTitle);
+      const data = getImageDescription(img, label ? label.textContent : 'Image');
       openLightbox(img.src, data.title, data.desc);
     });
   });
 
-  // Onboarding cards
   document.querySelectorAll('.onboarding-card').forEach(card => {
     card.addEventListener('click', function() {
       const img = this.querySelector('img');
       const label = this.querySelector('.onboarding-label');
-      const fallbackTitle = label ? label.textContent : 'Onboarding Step';
-      const data = getImageDescription(img, fallbackTitle);
+      const data = getImageDescription(img, label ? label.textContent : 'Onboarding Step');
       openLightbox(img.src, data.title, data.desc);
     });
   });
 
-  // Event cards
   document.querySelectorAll('.event-card').forEach(card => {
     card.addEventListener('click', function() {
       const img = this.querySelector('img');
       const titleEl = this.querySelector('.event-title');
-      const locationEl = this.querySelector('.event-location');
-      const fallbackTitle = titleEl ? titleEl.textContent : 'Event';
-      const location = locationEl ? locationEl.textContent : '';
-      const data = getImageDescription(img, fallbackTitle);
+      const data = getImageDescription(img, titleEl ? titleEl.textContent : 'Event');
       openLightbox(img.src, data.title, data.desc);
     });
   });
 
-  // Marketing cards
   document.querySelectorAll('.marketing-card').forEach(card => {
     card.addEventListener('click', function() {
       const img = this.querySelector('img');
       const titleEl = this.querySelector('.marketing-title');
-      const descEl = this.querySelector('.marketing-desc');
-      const fallbackTitle = titleEl ? titleEl.textContent : 'Image';
-      const fallbackDesc = descEl ? descEl.textContent : '';
-      const data = getImageDescription(img, fallbackTitle);
-       openLightbox(img.src, data.title, data.desc || fallbackDesc);
+      const data = getImageDescription(img, titleEl ? titleEl.textContent : 'Image');
+      openLightbox(img.src, data.title, data.desc);
     });
   });
 }

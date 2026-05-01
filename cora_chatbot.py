@@ -178,7 +178,7 @@ class CORAAssistant:
         """Handle demo requests"""
         response = (
             "You can access the CORA demo here po 😊\n\n"
-            "🔗 https://cora-cooperative.vercel.app/\n\n"
+            "🔗https://cora-landing-page-liart.vercel.app/\n\n"
             "Feel free po to explore the features. We also conduct FREE online demo presentations "
             "if gusto ninyo ng guided walkthrough 😊\n\n"
             "Would you like po ba to join our free online demo presentation?"

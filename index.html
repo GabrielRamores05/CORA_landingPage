@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CORA – Automate Your Cooperative Operations | Book Free Demo</title>
   <meta name="description"
-    content="CORA automates cooperative operations—reporting, member records, loans, savings, and more. Try the free demo today.">
+    content="CORA automates cooperative operations—reporting, member records, loans, savings, and more. Stop losing hours to manual work. Book your free demo today.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,8 +16,9 @@
     rel="stylesheet">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="index.css?v=2">
+  <link rel="stylesheet" href="index.css?v=3">
   <link rel="stylesheet" href="cora-chat.css?v=1">
+  <link rel="stylesheet" href="cro.css?v=1">
 
   <!-- EmailJS Library -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -44,12 +45,23 @@
 
 <body>
 
-  <!-- NAVIGATION -->
-  <nav class="navbar">
+  <!-- NAVIGATION (Sticky with CTA) -->
+  <nav class="navbar" id="navbar">
     <a href="#" class="logo">
       <img src="images/CORAlogo.png" alt="CORA Logo">
     </a>
-    <a href="#" class="btn-demo" onclick="openBookingModal(event)">Book Free Demo</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#cost-of-inaction" class="nav-link">Why CORA</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#social-proof" class="nav-link">Events</a>
+      <a href="#onboarding" class="nav-link">Support</a>
+    </div>
+    <a href="#" class="btn-demo" id="navCta" onclick="openBookingModal(event)">Book Free Demo</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- HERO SECTION -->
@@ -59,18 +71,22 @@
         <!-- Left Column: Content -->
         <div class="hero-left">
           <h1 class="hero-title">
-            Automate Your Cooperative<br>
-            <span class="highlight">Eliminate Manual Work</span>
+            Stop Losing Hours to<br>
+            <span class="highlight">Manual Cooperative Operations</span>
           </h1>
           <p class="hero-subtitle">Tapos na ang manual na reports. Time na para sa automated cooperative operations.</p>
-          <p class="hero-description">Ang CORA ang all-in-one system na nag-a-automate ng members, loans, savings, at
-            reports ng cooperatives sa Pilipinas — para mas mabilis, mas accurate, at less stress sa araw-araw na
-            operations.</p>
+          <p class="hero-description">CORA automates members, loans, savings, and reports for cooperatives across the
+            Philippines — para mas mabilis, mas accurate, at less stress sa araw-araw na operations.</p>
 
           <a href="#" class="hero-cta" onclick="openBookingModal(event)">
-            <span class="cta-icon">🚀</span>
             <span>Book Free Demo</span>
+            <span class="cta-arrow">→</span>
           </a>
+          <div class="hero-trust-line">
+            <span>✓ Free demo</span>
+            <span>✓ No commitment</span>
+            <span>✓ CDA-compliant reports</span>
+          </div>
         </div>
 
         <!-- Right Column: Founder Image -->
@@ -82,7 +98,8 @@
               <div class="image-glow"></div>
             </div>
             <div class="founder-info">
-              <p class="founder-quote">A direct demo from Joannah Ramores, the Founder of CORA and COO of Edgepoint
+              <p class="founder-quote">A direct demo from Joannah Ramores, the Founder of CORA and President of
+                Edgepoint
                 Solutions, Inc.</p>
             </div>
           </div>
@@ -91,34 +108,228 @@
     </div>
   </section>
 
-  <!-- ONBOARDING SECTION (Priority #1) -->
-  <section class="section onboarding-section" id="onboarding">
-    <div class="section-header">
-      <span class="section-label">Client</span>
-      <h2 class="section-title">How we onboard and support cooperatives</h2>
-      <p class="section-desc">Hindi ka iiwan sa setup. From day 1 hanggang fully operational, guided ang buong
-        onboarding process para siguradong mag-work ang CORA sa cooperative ninyo.</p>
-    </div>
-
-    <div class="onboarding-grid">
-      <div class="onboarding-card">
-        <img src="images/Onboarding_SEMCO1.jpg" alt="Onboarding meeting">
-        <span class="onboarding-label">onboarding</span>
+  <!-- TRUST BAR (Social proof via numbers) -->
+  <section class="trust-bar" id="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="trust-stat">
+        <span class="trust-number" data-target="30">0</span><span class="trust-suffix">+</span>
+        <span class="trust-label">Cooperatives Engaged</span>
       </div>
-      <div class="onboarding-card">
-        <img src="images/Onboarding_SEMCO2.jpg" alt="Training session">
-        <span class="onboarding-label">onboarding</span>
+      <div class="trust-divider"></div>
+      <div class="trust-stat">
+        <span class="trust-number" data-target="10">0</span><span class="trust-suffix">+</span>
+        <span class="trust-label">Live Events & Demos</span>
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-stat">
+        <span class="trust-number" data-target="200">0</span><span class="trust-suffix">+</span>
+        <span class="trust-label">Reports Automated</span>
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-stat">
+        <span class="trust-number" data-target="300">0</span><span class="trust-suffix">+</span>
+        <span class="trust-label">Hours Saved Monthly</span>
       </div>
     </div>
   </section>
 
-  <!-- EVENTS SECTION (Priority #2 - Social Proof) -->
-  <section class="section events-section" id="events">
+  <!-- COST OF INACTION SECTION (Urgency via real pain) -->
+  <section class="cost-section" id="cost-of-inaction">
+    <div class="cost-inner">
+      <div class="section-header">
+        <span class="section-label section-label--light">The Hidden Cost</span>
+        <h2 class="section-title section-title--light">Every Day Without Automation Costs Your Cooperative</h2>
+        <p class="section-desc section-desc--light">Hindi mo namamalayan, pero ang manual processes ay kumakain ng oras,
+          pera, at pagkakataon ng cooperative mo araw-araw.</p>
+      </div>
+
+      <div class="cost-grid">
+        <div class="cost-card animate-on-scroll">
+          <div class="cost-icon">⏰</div>
+          <h3 class="cost-title">20+ Hours/Week Wasted</h3>
+          <p class="cost-desc">Encoding, reconciliation, at manual report preparation — oras na dapat ginugugol sa
+            growth ng cooperative.</p>
+        </div>
+        <div class="cost-card animate-on-scroll">
+          <div class="cost-icon">❌</div>
+          <h3 class="cost-title">Costly Financial Errors</h3>
+          <p class="cost-desc">Manual computations lead to mistakes in member records, loan tracking, at financial
+            statements.</p>
+        </div>
+        <div class="cost-card animate-on-scroll">
+          <div class="cost-icon">🐌</div>
+          <h3 class="cost-title">Delayed Decision-Making</h3>
+          <p class="cost-desc">Waiting days for reports that should take seconds — habang ang competitors nag-a-advance
+            na.</p>
+        </div>
+        <div class="cost-card animate-on-scroll">
+          <div class="cost-icon">📋</div>
+          <h3 class="cost-title">CDA Compliance Risk</h3>
+          <p class="cost-desc">Manual reports increase risk of non-compliance — putting your cooperative's standing at
+            stake.</p>
+        </div>
+      </div>
+
+      <div class="cost-cta-wrap">
+        <a href="#" class="cost-cta" onclick="openBookingModal(event)">
+          See How CORA Eliminates These Problems →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAIN → SOLUTION TRANSFORMATION -->
+  <section class="transform-section" id="transformation">
+    <div class="transform-inner">
+      <div class="section-header">
+        <span class="section-label">The Transformation</span>
+        <h2 class="section-title">From Manual Chaos to Automated Clarity</h2>
+        <p class="section-desc">Tingnan mo kung paano nagbabago ang araw-araw na operations kapag automated na ang
+          system mo.</p>
+      </div>
+
+      <div class="transform-grid">
+        <div class="transform-col transform-before">
+          <div class="transform-col-header">
+            <span class="transform-badge transform-badge--before">Before CORA</span>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-x">✕</span>
+            <p>Hours encoding member data manually</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-x">✕</span>
+            <p>Excel-based reports prone to errors</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-x">✕</span>
+            <p>Loan tracking scattered across files</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-x">✕</span>
+            <p>Days to prepare for CDA submissions</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-x">✕</span>
+            <p>No visibility into cooperative health</p>
+          </div>
+        </div>
+
+        <div class="transform-arrow-col">
+          <div class="transform-arrow">→</div>
+        </div>
+
+        <div class="transform-col transform-after">
+          <div class="transform-col-header">
+            <span class="transform-badge transform-badge--after">After CORA</span>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-check">✓</span>
+            <p>Member records updated in seconds</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-check">✓</span>
+            <p>One-click financial reports, always accurate</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-check">✓</span>
+            <p>Real-time loan & savings dashboards</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-check">✓</span>
+            <p>CDA-ready reports generated instantly</p>
+          </div>
+          <div class="transform-item animate-on-scroll">
+            <span class="transform-check">✓</span>
+            <p>Live dashboards for informed decisions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION (Outcome-Based) -->
+  <section class="section features-section" id="features">
+    <div class="features-container">
+      <div class="features-header">
+        <span class="features-label">CORA Capabilities</span>
+        <h2 class="features-title">Everything Your Cooperative Needs — Automated</h2>
+        <p class="features-subtitle">Hindi lang tools — outcomes na talagang nagbabago ng operations mo araw-araw.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Never Prepare a Report Manually Again</h3>
+            <p class="feature-desc">Balance sheets, income statements, and trial balances generated in one click —
+              always accurate, always CDA-ready.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Every Member Record, Instantly Accessible</h3>
+            <p class="feature-desc">Search, update, and manage all member profiles, shares, and contributions — walang
+              spreadsheet, walang hassle.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Loan & Savings Tracking on Autopilot</h3>
+            <p class="feature-desc">Real-time tracking of deposits, withdrawals, loans, and amortizations — no manual
+              encoding needed.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">➕</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Zero-Error Accounting, Automated</h3>
+            <p class="feature-desc">Journal entries, general ledger, at financial tracking — automatic na, walang
+              computation mistakes.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🧮</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Patronage Refunds Calculated for You</h3>
+            <p class="feature-desc">Automatic member refund computation based on actual contributions — fair, fast, and
+              transparent.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <div class="feature-content">
+            <h3 class="feature-title">CDA-Ready from Day One</h3>
+            <p class="feature-desc">Every report meets Cooperative Development Authority requirements — no
+              reformatting, no stress.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Surplus Allocation, Simplified</h3>
+            <p class="feature-desc">Accurate surplus computation and reserve allocation handled by the system —
+              transparent at compliant.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF (Events + Real-World Usage) -->
+  <section class="section social-proof-section" id="social-proof">
     <div class="section-header">
       <span class="section-label">Real World Impact</span>
-      <h2 class="section-title">Live cooperative events and demos across different locations</h2>
-      <p class="section-desc">Ito ang CORA in real life — ginagamit ng cooperatives sa events, trainings, assemblies, at
-        live demos across the Philippines.</p>
+      <h2 class="section-title">Trusted by Cooperatives Across the Philippines</h2>
+      <p class="section-desc">CORA in action — sa events, trainings, at real cooperative operations nationwide.</p>
     </div>
 
     <div class="events-grid">
@@ -165,36 +376,12 @@
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- ONLINE DEMO SECTION (Priority #3) -->
-  <section class="section demo-section" id="demo">
-    <div class="demo-content">
-      <h2 class="demo-title">Online demo sessions for cooperatives nationwide</h2>
-      <p class="demo-subtitle">Busy? Malayo? Kahit saan ka pa, pwede mong makita LIVE kung paano pinapadali ng CORA ang
-        operations ng cooperatives.</p>
-
-      <div class="demo-img-wrapper">
-        <img src="images/Online_onlineDemo1.jpg" alt="Online demo session">
-      </div>
-
-      <a href="#" class="demo-cta" onclick="openBookingModal(event)">
-        <span>📅</span> Book Free Demo
-      </a>
+    <!-- Marketing Posters Sub-grid -->
+    <div class="posters-header">
+      <h3 class="posters-title">See How Cooperatives Transformed with CORA</h3>
     </div>
-  </section>
-
-  <!-- SECTION 4: MARKETING / POSTERS (5 images) -->
-  <section class="section marketing-section" id="stories">
-    <div class="section-header">
-      <span class="section-label">Success Stories</span>
-      <h2 class="section-title">See how cooperatives transformed with CORA</h2>
-      <p class="section-desc">From manual encoding to fully automated systems — ganito nagbago ang operations ng real
-        cooperatives gamit ang CORA.</p>
-    </div>
-
     <div class="marketing-grid">
-      <!-- Landscape posters -->
       <div class="marketing-card">
         <img src="images/posterLandscape1.jpg" alt="CORA overview">
         <div class="marketing-content">
@@ -209,7 +396,6 @@
           <p class="marketing-desc">Everything you need to run efficiently</p>
         </div>
       </div>
-      <!-- Portrait posters -->
       <div class="marketing-card">
         <img src="images/posterPortrait1.jpg" alt="Success story testimonial">
         <div class="marketing-content">
@@ -234,73 +420,59 @@
     </div>
   </section>
 
-  <!-- SECTION 5: CORA CAPABILITIES (Features) -->
-  <section class="section features-section">
-    <div class="features-container">
-      <div class="features-header">
-        <span class="features-label">CORA Capabilities</span>
-        <h2 class="features-title">Everything you need to run a modern cooperative</h2>
-        <p class="features-subtitle">Lahat ng kailangan ng cooperative mo — automated reports, accounting, loans,
-          savings, at compliance — nasa isang system lang.</p>
+  <!-- ONLINE DEMO SECTION -->
+  <section class="section demo-section" id="demo">
+    <div class="demo-content">
+      <h2 class="demo-title">See CORA in Action — Live Demo, Anywhere You Are</h2>
+      <p class="demo-subtitle">Kahit saan ka pa sa Pilipinas, pwede mong makita LIVE kung paano binabago ng CORA ang
+        cooperative operations.</p>
+
+      <div class="demo-img-wrapper">
+        <img src="images/Online_onlineDemo1.jpg" alt="Online demo session">
       </div>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">➕</div>
-          <div class="feature-content">
-            <h3 class="feature-title">Accounting Automation</h3>
-            <p class="feature-desc">Automate journal entries, general ledger, and financial tracking with zero errors.
-            </p>
-          </div>
-        </div>
+      <a href="#" class="demo-cta" onclick="openBookingModal(event)">
+        <span>📅</span> Schedule a Live Demo
+      </a>
+    </div>
+  </section>
 
-        <div class="feature-card">
-          <div class="feature-icon">👥</div>
-          <div class="feature-content">
-            <h3 class="feature-title">Member Records Management</h3>
-            <p class="feature-desc">Securely store and manage all member profiles, shares, and contributions.</p>
-          </div>
-        </div>
+  <!-- ONBOARDING SECTION (Support Reassurance) -->
+  <section class="section onboarding-section" id="onboarding">
+    <div class="section-header">
+      <span class="section-label">Full Support</span>
+      <h2 class="section-title">We Don't Just Give You Software — We Set You Up for Success</h2>
+      <p class="section-desc">Hindi ka iiwan sa setup. From day 1 hanggang fully operational, guided ang buong
+        onboarding process para siguradong mag-work ang CORA sa cooperative ninyo.</p>
+    </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">💰</div>
-          <div class="feature-content">
-            <h3 class="feature-title">Savings &amp; Loans Tracking</h3>
-            <p class="feature-desc">Real-time tracking of deposits, withdrawals, loans, and amortizations.</p>
-          </div>
-        </div>
+    <div class="onboarding-grid">
+      <div class="onboarding-card">
+        <img src="images/Onboarding_SEMCO1.jpg" alt="Onboarding meeting">
+        <span class="onboarding-label">onboarding</span>
+      </div>
+      <div class="onboarding-card">
+        <img src="images/Onboarding_SEMCO2.jpg" alt="Training session">
+        <span class="onboarding-label">onboarding</span>
+      </div>
+    </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <div class="feature-content">
-            <h3 class="feature-title">Financial Reports</h3>
-            <p class="feature-desc">Generate balance sheets, income statements, and trial balances instantly.</p>
-          </div>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🧮</div>
-          <div class="feature-content">
-            <h3 class="feature-title">Patronage Refund Computation</h3>
-            <p class="feature-desc">Automatically calculate member refunds based on contributions.</p>
-          </div>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">📦</div>
-          <div class="feature-content">
-            <h3 class="feature-title">Surplus Computation</h3>
-            <p class="feature-desc">Accurate calculation of surplus and allocation to reserves.</p>
-          </div>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">✅</div>
-          <div class="feature-content">
-            <h3 class="feature-title">CDA-Ready Reports</h3>
-            <p class="feature-desc">All reports meet the Cooperative Development Authority's requirements.</p>
-          </div>
-        </div>
+    <!-- 3-Step Process -->
+    <div class="onboarding-steps">
+      <div class="onboarding-step animate-on-scroll">
+        <div class="step-number">1</div>
+        <h3 class="step-title">Discovery Call</h3>
+        <p class="step-desc">We learn your cooperative's specific needs, structure, and current pain points.</p>
+      </div>
+      <div class="onboarding-step animate-on-scroll">
+        <div class="step-number">2</div>
+        <h3 class="step-title">Guided Setup</h3>
+        <p class="step-desc">Full data migration, system configuration, and customization for your cooperative.</p>
+      </div>
+      <div class="onboarding-step animate-on-scroll">
+        <div class="step-number">3</div>
+        <h3 class="step-title">Ongoing Support</h3>
+        <p class="step-desc">Training sessions, system updates, and dedicated assistance whenever you need it.</p>
       </div>
     </div>
   </section>
@@ -308,106 +480,105 @@
   <!-- FINAL CTA SECTION -->
   <section class="final-cta" id="final-demo">
     <div class="final-cta-content">
-      <h2>Ready to automate your cooperative?</h2>
-      <p>Kung pagod na kayo sa manual processes, ngayon ang time to upgrade. Join cooperatives in the Philippines na
+      <h2>Your Cooperative Deserves Better Than Spreadsheets</h2>
+      <p>Hundreds of hours saved. Zero manual errors. Full CDA compliance. One system.</p>
+      <p class="final-cta-sub">Kung pagod na kayo sa manual processes, ngayon ang time to upgrade. Join cooperatives na
         gumagamit na ng CORA para mas mabilis, mas accurate, at mas efficient ang operations.</p>
       <a href="#" class="final-cta-btn" onclick="openBookingModal(event)">
-        <span>🚀</span> Book Free Demo Now
+        <span>🚀</span> Book Your Free Demo Now
       </a>
-      <span class="final-cta-note">No commitment · Works on mobile · Setup in minutes</span>
+      <span class="final-cta-note">No commitment · Works on any device · Setup guided by our team</span>
     </div>
-    </footer>
+  </section>
 
-    <!-- IMAGE LIGHTBOX MODAL -->
-    <div class="lightbox-overlay" id="lightbox">
-      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-      <div class="lightbox-content">
-        <div class="lightbox-image-wrapper">
-          <img id="lightbox-img" src="" alt="Enlarged view">
-        </div>
-        <div class="lightbox-caption">
-          <h3 id="lightbox-title"></h3>
-          <p id="lightbox-desc"></p>
-        </div>
+  <!-- IMAGE LIGHTBOX MODAL -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <div class="lightbox-content">
+      <div class="lightbox-image-wrapper">
+        <img id="lightbox-img" src="" alt="Enlarged view">
+      </div>
+      <div class="lightbox-caption">
+        <h3 id="lightbox-title"></h3>
+        <p id="lightbox-desc"></p>
       </div>
     </div>
+  </div>
 
-    <!-- BOOKING MODAL -->
-    <div class="modal-overlay" id="bookingModal">
-      <div class="modal">
-        <div class="modal-header">
-          <button class="modal-close" onclick="closeBookingModal()">&times;</button>
-          <h2>Book Your Free Demo</h2>
-          <p class="modal-subtitle">Select a date in May 2026</p>
-        </div>
-        <div class="modal-body">
-          <form id="bookingForm" onsubmit="submitBooking(event)">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" required placeholder="Enter your full name">
-            </div>
+  <!-- BOOKING MODAL -->
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+        <h2>Book Your Free Demo</h2>
+        <p class="modal-subtitle">Select a date in May 2026</p>
+      </div>
+      <div class="modal-body">
+        <form id="bookingForm" onsubmit="submitBooking(event)">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+          </div>
 
-            <div class="form-group">
-              <label for="coop">Cooperative Name</label>
-              <input type="text" id="coop" name="coop" required placeholder="Enter cooperative name">
-            </div>
+          <div class="form-group">
+            <label for="coop">Cooperative Name</label>
+            <input type="text" id="coop" name="coop" required placeholder="Enter cooperative name">
+          </div>
 
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" required placeholder="your@email.com">
-            </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="your@email.com">
+          </div>
 
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" required placeholder="09XX XXX XXXX">
-            </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required placeholder="09XX XXX XXXX">
+          </div>
 
-            <div class="form-group">
-              <label>Select Demo Date (May 2026)</label>
-              <div class="date-options">
-                <div class="date-option">
-                  <input type="radio" id="may8" name="date" value="May 8, 2026" required>
-                  <label for="may8">
-                    May 8
-                    <span>Friday</span>
-                  </label>
-                </div>
+          <div class="form-group">
+            <label>Select Demo Date (May 2026)</label>
+            <div class="date-options">
+              <div class="date-option">
+                <input type="radio" id="may8" name="date" value="May 8, 2026" required>
+                <label for="may8">
+                  May 8
+                  <span>Friday</span>
                 </label>
               </div>
             </div>
-        </div>
+          </div>
 
-        <div class="form-group">
-          <label for="questions">Questions or Specific Needs</label>
-          <textarea id="questions" name="questions"
-            placeholder="Tell us what you'd like to see in the demo..."></textarea>
-        </div>
+          <div class="form-group">
+            <label for="questions">Questions or Specific Needs</label>
+            <textarea id="questions" name="questions"
+              placeholder="Tell us what you'd like to see in the demo..."></textarea>
+          </div>
 
-        <button type="submit" class="form-submit">Confirm Booking</button>
+          <button type="submit" class="form-submit">Confirm Booking</button>
         </form>
       </div>
     </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">CORA</div>
+    <p>Cooperative Operations &amp; Records Automation</p>
+    <p>Built for Philippine cooperatives who want to work smarter, not harder.</p>
+    <p style="margin-top: 16px;">
+      <a href="#" onclick="openBookingModal(event)" class="footer-link">Book Your Free Demo →</a>
+    </p>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Edgepoint Solutions, Inc. All rights reserved.</p>
     </div>
+  </footer>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer-brand">CORA</div>
-      <p>Cooperative Operations &amp; Records Automation</p>
-      <p>Built for Philippine cooperatives who want to work smarter, not harder.</p>
-      <p style="margin-top: 16px;">
-        <a href="#" onclick="openBookingModal(event)" class="footer-link">Try the Free Demo →</a>
-      </p>
-      <div class="footer-bottom">
-        <p>&copy; 2026 CORA. All rights reserved.</p>
-      </div>
-    </footer>
+  <!-- JavaScript for scroll animations and booking modal -->
+  <script src="script.js"></script>
 
-    <!-- JavaScript for scroll animations and booking modal -->
-    <script src="script.js"></script>
-
-    <!-- CORA AI Chatbot Widget -->
-    <div id="cora-chat-widget"></div>
-    <script src="cora-chat.js?v=1"></script>
+  <!-- CORA AI Chatbot Widget -->
+  <div id="cora-chat-widget"></div>
+  <script src="cora-chat.js?v=1"></script>
 
 </body>
 
