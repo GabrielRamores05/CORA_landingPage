@@ -15,7 +15,7 @@ Mas mabilis, organized, at less manual work po 😊
 
 Would you like po ba to receive the CORA All Feature Document? Just say 'yes' and I'll send you the PDF right away!
 
-You can also ask me po about:
+You can also ask me po about (1-15):
 1. What is CORA?
 2. Ano ang mga features?
 3. Magkano ang price?
@@ -25,7 +25,12 @@ You can also ask me po about:
 7. Para saan bahagi ng cooperative?
 8. Online or offline?
 9. Support and training?
-10. How soon can we start?`;
+10. How soon can we start?
+11. How to migrate from manual?
+12. Ano ang requirements?
+13. May contract ba?
+14. Support after implementation?
+15. Mga payment terms?`;
 
 // Initialize new conversation
 export function initConversation(userId) {
@@ -65,6 +70,23 @@ function matchIntent(userInput) {
 
 // Handle responses
 function getResponse(intent, userInput) {
+  const questions = `You can also ask me po about (1-15):
+1. What is CORA?
+2. Ano ang mga features?
+3. Magkano ang price? (₱36,000)
+4. Paano magdemo?
+5. Need internet ba?
+6. Legit ba kayo?
+7. Para saan bahagi ng cooperative?
+8. Online or offline?
+9. Support and training?
+10. How soon can we start?
+11. How to migrate from manual?
+12. Ano ang requirements?
+13. May contract ba?
+14. Support after implementation?
+15. Mga payment terms?`;
+  
   switch (intent) {
     case 'greeting':
       return "Hello po! 😊 Salamat sa interes sa CORA. May tanong po kayo about cooperative automation?";

@@ -38,7 +38,7 @@ class CORAChat {
         <div class="cora-chat-header">
           <div class="cora-chat-header-content">
             <div class="cora-chat-avatar">
-              <img src="images/CORAlogo.png" alt="CORA" style="width: 28px; height: 28px; object-fit: contain;">
+              <img src="images/CORAlogo.png" alt="CORA" style="width: 24px; height: 24px; object-fit: contain;">
             </div>
             <div class="cora-chat-header-info">
               <h3>CORA Assistant</h3>
@@ -198,9 +198,9 @@ class CORAChat {
     // Format message content (handle line breaks and links)
     const formattedContent = this.formatMessageContent(content);
     
-    messageDiv.innerHTML = `
-      <div class="cora-message-avatar">${role === 'bot' ? '🤖' : '👤'}</div>
-      <div class="cora-message-content">${formattedContent}</div>
+        messageDiv.innerHTML = `
+        <div class="cora-message-avatar">${role === 'bot' ? '<img src="images/CORAlogo.png" alt="CORA" style="width: 24px; height: 24px; object-fit: contain;">' : '👤'}</div>
+        <div class="cora-message-content">${formattedContent}</div>
     `;
     
     messagesContainer.appendChild(messageDiv);
