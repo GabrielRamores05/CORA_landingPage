@@ -176,13 +176,14 @@
 }
 
 .cora-message-content {
-  max-width: 280px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  word-wrap: break-word;
-  font-size: 14px;
-  line-height: 1.5;
-  animation: slideInMessage 0.3s ease both;
+   max-width: 280px;
+   padding: 10px 14px;
+   border-radius: 12px;
+   word-wrap: break-word;
+   font-size: 12px;
+   line-height: 1.5;
+   animation: slideInMessage 0.3s ease both;
+   text-align: left;
 }
 
 @keyframes slideInMessage {
@@ -441,7 +442,7 @@
    }
  }
  
- @media (max-width: 600px) {
+@media (max-width: 600px) {
    .cora-message-content {
      font-size: 12px;
    }
@@ -454,11 +455,15 @@
      font-size: 11px;
    }
  }
-  
-  .cora-message-content {
-    max-width: 180px !important;
-    font-size: 13px;
-  }
+   
+   .cora-chat-header-info h3 {
+     font-size: 15px;
+   }
+   
+   .cora-chat-header-info p {
+     font-size: 11px;
+   }
+ }
 }
 
 /* Print Styles */

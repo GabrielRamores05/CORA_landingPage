@@ -120,29 +120,29 @@ class CORAChat {
     }
   }
   
-  async startChat() {
-    try {
-      const response = await fetch(`${this.apiUrl}/chat/start`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user_id: this.userId })
-      });
-      
-      const data = await response.json();
-      if (data.success) {
-        this.addMessage(data.welcome_message, 'bot');
-        this.isOpen = true;
-        document.querySelector('.cora-chat-widget').style.display = 'flex';
-      } else {
-        this.addMessage('Sorry po, may technical issue kami. Please try again 😊', 'bot');
-      }
-    } catch (error) {
-      console.error('Error starting chat:', error);
-      this.addMessage('Sorry po, may connection issue. Please try again 😊', 'bot');
-    }
-  }
+   async startChat() {
+     try {
+       const response = await fetch(`${this.apiUrl}/chat/start`, {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ user_id: this.userId })
+       });
+       
+       const data = await response.json();
+       if (data.success) {
+         this.addMessage(data.welcome_message, 'bot');
+         // Do not auto-open chat; keep it closed, toggle button visible
+         this.isOpen = false;
+       } else {
+         this.addMessage('Sorry po, may technical issue kami. Please try again 😊', 'bot');
+       }
+     } catch (error) {
+       console.error('Error starting chat:', error);
+       this.addMessage('Sorry po, may connection issue. Please try again 😊', 'bot');
+     }
+   }
   
   async sendMessage() {
     const input = document.getElementById('cora-input');
