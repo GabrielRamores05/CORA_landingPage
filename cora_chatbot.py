@@ -496,16 +496,13 @@ class CORAAssistant:
 # Initialize assistant
 assistant = CORAAssistant()
 
-@app.route('/')
-@app.route('/index.html')
-def serve_index():
-    return send_from_directory('.', 'index.html')
-
-@app.route('/<path:filename>')
-def serve_static(filename):
-    if os.path.exists(filename):
-        return send_from_directory('.', filename)
-    return send_from_directory('.', 'index.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    root_dir = os.path.abspath(os.path.dirname(__file__))
+    if path and os.path.exists(os.path.join(root_dir, path)):
+        return send_from_directory(root_dir, path)
+    return send_from_directory(root_dir, 'index.html')
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
@@ -596,4 +593,4 @@ if __name__ == '__main__':
     print("CORA AI Assistant Starting...")
     print("Server running on http://localhost:5000")
     print("Chat API: http://localhost:5000/api/chat")
-    app.run(debug=True, port=5000, threaded=True)
+    app.run(debug=False, port=5000, threaded=True)

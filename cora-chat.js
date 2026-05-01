@@ -33,7 +33,7 @@ class CORAChat {
     
     // Create chatbot HTML
     const chatbotHTML = `
-      <div class="cora-chat-widget ${this.theme}">
+      <div class="cora-chat-widget ${this.theme}" style="display: ${this.isOpen ? 'flex' : 'none'};">
         <!-- Chat Header -->
         <div class="cora-chat-header">
           <div class="cora-chat-header-content">
@@ -69,7 +69,7 @@ class CORAChat {
       </div>
       
       <!-- Chat Toggle Button (Minimized) -->
-      <button class="cora-chat-toggle" id="cora-toggle-btn" style="display: none;">
+      <button class="cora-chat-toggle" id="cora-toggle-btn" style="display: ${this.isOpen ? 'none' : 'flex'};">
         <span class="cora-chat-toggle-icon">💬</span>
         <span class="cora-chat-toggle-label">Chat with us!</span>
       </button>
@@ -110,13 +110,15 @@ class CORAChat {
     const widget = document.querySelector('.cora-chat-widget');
     const toggleBtn = document.getElementById('cora-toggle-btn');
     
-    if (this.isOpen) {
-      widget.style.display = 'flex';
-      toggleBtn.style.display = 'none';
-      document.getElementById('cora-input').focus();
-    } else {
-      widget.style.display = 'none';
-      toggleBtn.style.display = 'flex';
+    if (widget && toggleBtn) {
+      if (this.isOpen) {
+        widget.style.display = 'flex';
+        toggleBtn.style.display = 'none';
+        document.getElementById('cora-input').focus();
+      } else {
+        widget.style.display = 'none';
+        toggleBtn.style.display = 'flex';
+      }
     }
   }
   
@@ -215,7 +217,7 @@ class CORAChat {
         let formatted = content.replace(urlRegex, '<a href="$1" target="_blank" class="cora-link">$1</a>');
         
         // Also convert relative links in the PDF directory to absolute links
-        const pdfUrlRegex = /(\\/PDF\\\/[^\s]*)/g;
+        const pdfUrlRegex = /(\/PDF\/[^\s]*)/g;
         formatted = formatted.replace(pdfUrlRegex, (match) => {
             const absoluteUrl = window.location.origin + match;
             return `<a href="${absoluteUrl}" target="_blank" class="cora-link">${match}</a>`;
@@ -256,11 +258,19 @@ class CORAChat {
 }
 
 // Initialize chatbot when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  // Auto-initialize chatbot
+const initCORAChat = () => {
+  if (window.coraChat) return; // Prevent double initialization
+  
+  console.log('🤖 CORA Chatbot Initializing...');
   window.coraChat = new CORAChat({
     apiUrl: '/api',
     containerId: 'cora-chat-widget',
     theme: 'light'
   });
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCORAChat);
+} else {
+  initCORAChat();
+}
