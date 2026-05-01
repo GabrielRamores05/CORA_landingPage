@@ -1,17 +1,25 @@
 """
 CORA AI Chatbot Backend
 Built-in chatbot for CORA landing page
-Handles customer inquiries with Taglish conversational flow
+Handles customer inquiries with Tagalog conversational flow
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
 import json
 import re
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
+
+# Initialize OpenAI client (reads from OPENAI_API_KEY env var)
+try:
+    from openai import OpenAI
+    client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY')) if os.environ.get('OPENAI_API_KEY') else None
+except:
+    client = None
 
 # Store conversation history per user
 conversations = {}
@@ -30,7 +38,19 @@ class CORAAssistant:
             "✅ Financial reports\n"
             "✅ CDA compliance reports\n\n"
             "Mas mabilis, organized, at less manual work po 😊\n\n"
-            "May I know po what type of cooperative you are handling?"
+            "Would you like po ba to receive the CORA All Feature Document? "
+            "Just say 'yes' and I'll send you the PDF right away!\n\n"
+            "You can also ask me po about:\n"
+            "1. What is CORA?\n"
+            "2. Ano ang mga features?\n"
+            "3. Magkano ang price?\n"
+            "4. Paano magdemo?\n"
+            "5. Need internet ba?\n"
+            "6. Legit ba kayo?\n"
+            "7. Para saan bahagi ng cooperative?\n"
+            "8. Online or offline?\n"
+            "9. Support and training?\n"
+            "10. How soon can we start?"
         )
         
         # Intent patterns for matching user input
@@ -70,6 +90,10 @@ class CORAAssistant:
             'challenges': {
                 'patterns': [r'challenge', r'problem', r'issue', r'difficult', r'hirap', r'problema', r'struggling'],
                 'response': self.handle_challenges
+            },
+            'yes_response': {
+                'patterns': [r'^yes$', r'^yes\s*$', r'^oo$', r'^sige$', r'^sure$', r'^okay$'],
+                'response': self.handle_yes
             }
         }
     
@@ -192,6 +216,17 @@ class CORAAssistant:
         session_data['challenges_noted'] = user_input
         return response
     
+    def handle_yes(self, user_input, session_data):
+        """Handle yes response for PDF request"""
+        response = (
+            "Opo! Narito na po ang CORA All Feature Document 😊\n\n"
+            "📄 Download link: /PDF/CORA_PROPOSAL1.pdf\n\n"
+            "This document contains all the features and benefits of CORA. "
+            "Please review po and let me know if you have any questions!"
+        )
+        session_data['stage'] = 'pdf_sent'
+        return response
+    
     def handle_default(self, user_input, session_data):
         """Handle unmatched inputs with a helpful response"""
         responses = [
@@ -220,13 +255,33 @@ class CORAAssistant:
             'timestamp': datetime.now().isoformat()
         })
         
-        # Match intent and get response
-        intent, handler = self.match_intent(user_input)
-        
-        if intent and handler:
-            response = handler(user_input, session_data)
-        else:
-            response = self.handle_default(user_input, session_data)
+        # Try OpenAI first if API key is available
+        try:
+            if client is not None:
+                messages = [
+                    {"role": "system", "content": "You are CORA, a helpful AI assistant for a cooperative management system in the Philippines. Speak in Tagalog/Taglish (mix of Tagalog and English). Always be polite and use 'po' and 'opo'. Keep responses concise but helpful. Use emojis sparingly."}
+                ]
+                # Add conversation history
+                for msg in session_data['history']:
+                    messages.append({"role": msg['role'], "content": msg['content']})
+                
+                completion = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages,
+                    max_tokens=200,
+                    temperature=0.7
+                )
+                response = completion.choices[0].message.content
+                intent = 'openai_response'
+            else:
+                raise Exception("No OpenAI API key")
+        except Exception as e:
+            # Fallback to rule-based responses
+            intent, handler = self.match_intent(user_input)
+            if intent and handler:
+                response = handler(user_input, session_data)
+            else:
+                response = self.handle_default(user_input, session_data)
         
         # Add bot response to history
         session_data['history'].append({
@@ -244,6 +299,17 @@ class CORAAssistant:
 
 # Initialize assistant
 assistant = CORAAssistant()
+
+@app.route('/')
+@app.route('/index.html')
+def serve_index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    if os.path.exists(filename):
+        return send_from_directory('.', filename)
+    return send_from_directory('.', 'index.html')
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
@@ -331,7 +397,7 @@ def health():
     }), 200
 
 if __name__ == '__main__':
-    print("🤖 CORA AI Assistant Starting...")
-    print("📍 Server running on http://localhost:5000")
-    print("📊 Chat API: http://localhost:5000/api/chat")
-    app.run(debug=True, port=5000)
+    print("CORA AI Assistant Starting...")
+    print("Server running on http://localhost:5000")
+    print("Chat API: http://localhost:5000/api/chat")
+    app.run(debug=True, port=5000, threaded=True)

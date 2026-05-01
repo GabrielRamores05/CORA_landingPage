@@ -5,7 +5,7 @@
 
 class CORAChat {
   constructor(options = {}) {
-    this.apiUrl = options.apiUrl || 'http://localhost:5000/api';
+    this.apiUrl = options.apiUrl || '/api';
     this.userId = options.userId || `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     this.containerId = options.containerId || 'cora-chat-widget';
     this.theme = options.theme || 'light';
@@ -38,7 +38,7 @@ class CORAChat {
         <div class="cora-chat-header">
           <div class="cora-chat-header-content">
             <div class="cora-chat-avatar">
-              <span>🤖</span>
+              <img src="images/CORAlogo.png" alt="CORA" style="width: 28px; height: 28px; object-fit: contain;">
             </div>
             <div class="cora-chat-header-info">
               <h3>CORA Assistant</h3>
@@ -135,10 +135,12 @@ class CORAChat {
         this.addMessage(data.welcome_message, 'bot');
         this.isOpen = true;
         document.querySelector('.cora-chat-widget').style.display = 'flex';
+      } else {
+        this.addMessage('Sorry po, may technical issue kami. Please try again 😊', 'bot');
       }
     } catch (error) {
       console.error('Error starting chat:', error);
-      this.addMessage('Sorry po, may technical issue kami. Please refresh the page 😊', 'bot');
+      this.addMessage('Sorry po, may connection issue. Please try again 😊', 'bot');
     }
   }
   
@@ -250,7 +252,7 @@ class CORAChat {
 document.addEventListener('DOMContentLoaded', () => {
   // Auto-initialize chatbot
   window.coraChat = new CORAChat({
-    apiUrl: 'http://localhost:5000/api',
+    apiUrl: '/api',
     containerId: 'cora-chat-widget',
     theme: 'light'
   });
