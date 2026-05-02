@@ -345,8 +345,8 @@
   right: 24px;
   z-index: 9998;
 
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 
   border-radius: 50%;
   border: none;
@@ -397,6 +397,7 @@
 .cora-chat-toggle:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.6);
   outline-offset: 3px;
+  
 }
 
 /* Animations */
