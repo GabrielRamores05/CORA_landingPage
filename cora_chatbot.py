@@ -38,24 +38,24 @@ class CORAAssistant:
             "✅ Financial reports\n"
             "✅ CDA compliance reports\n\n"
             "Mas mabilis, organized, at less manual work po 😊\n\n"
-            "Would you like po ba to receive the CORA All Feature Document? "
-            "Just say 'yes' and I'll send you the PDF right away!\n\n"
-            "You can also ask me po by typing the number:\n"
+            "Please select a question by typing the number:\n"
             "1. What is CORA?\n"
             "2. Ano ang mga features?\n"
-            "3. Magkano ang price?\n"
-            "4. Paano magdemo?\n"
-            "5. Need internet ba?\n"
-            "6. Legit ba kayo?\n"
-            "7. Para saan bahagi ng cooperative?\n"
-            "8. Online or offline?\n"
-            "9. Support and training?\n"
+            "3. Paano magdemo?\n"
+            "4. Need internet ba?\n"
+            "5. Legit ba kayo?\n"
+            "6. Para saan bahagi ng cooperative?\n"
+            "7. Online or offline?\n"
+            "8. Support and training?\n"
+            "9. Magkano ang price?\n"
             "10. How soon can we start?\n"
             "11. Ano ang mga benepisyo ng CORA?\n"
             "12. Paano ito tumutulong sa pagbabayad ng utang?\n"
             "13. May mobile app ba?\n"
             "14. Safe ba ang data namin?\n"
-            "15. Paano ko i-install ang CORA?"
+            "15. Paano ko i-install ang CORA?\n\n"
+            "Would you like po ba to receive the CORA All Feature Document? "
+            "Just say 'yes' and I'll send you the PDF right away!"
         )
         
         # Intent patterns for matching user input
@@ -72,32 +72,32 @@ class CORAAssistant:
                 'patterns': [r'features', r'ano.*automate', r'kaya.*gawin', r'ano.*features', r'ano.*pwede', r'what can', r'^2$', r'^\s*2\s*$'],
                 'response': self.handle_features
             },
-            'pricing': {
-                'patterns': [r'price', r'magkano', r'cost', r'how much', r'fee', r'bayad', r'presyo', r'^3$', r'^\s*3\s*$'],
-                'response': self.handle_pricing
-            },
             'demo': {
-                'patterns': [r'demo', r'try', r'test', r'how.*demo', r'paano.*demo', r'makita.*demo', r'access', r'login', r'^4$', r'^\s*4\s*$'],
+                'patterns': [r'demo', r'try', r'test', r'how.*demo', r'paano.*demo', r'makita.*demo', r'access', r'login', r'^3$', r'^\s*3\s*$'],
                 'response': self.handle_demo
             },
             'online_offline': {
-                'patterns': [r'online', r'offline', r'internet', r'connection', r'kailangan.*internet', r'^5$', r'^\s*5\s*$'],
+                'patterns': [r'online', r'offline', r'internet', r'connection', r'kailangan.*internet', r'^4$', r'^\s*4\s*$', r'^7$', r'^\s*7\s*$'],
                 'response': self.handle_online_offline
             },
             'trusted': {
-                'patterns': [r'legit', r'trusted', r'secure', r'safe', r'real', r'authentic', r'tunay', r'^6$', r'^\s*6\s*$'],
+                'patterns': [r'legit', r'trusted', r'secure', r'safe', r'real', r'authentic', r'tunay', r'^5$', r'^\s*5\s*$'],
                 'response': self.handle_trusted
             },
-            'manual_process': {
-                'patterns': [r'manual', r'excel', r'naka.*excel', r'spreadsheet', r'papelado', r'walang system', r'^7$', r'^\s*7\s*$'],
-                'response': self.handle_manual_process
+            'cooperative_part': {
+                'patterns': [r'para saan bahagi', r'bahagi.*cooperative', r'ano.*bahagi', r'^6$', r'^\s*6\s*$'],
+                'response': self.handle_cooperative_part
             },
-            'challenges': {
-                'patterns': [r'challenge', r'problem', r'issue', r'difficult', r'hirap', r'problema', r'struggling', r'^8$', r'^\s*8\s*$'],
-                'response': self.handle_challenges
+            'support_training': {
+                'patterns': [r'support', r'training', r'support.*training', r'training.*support', r'^8$', r'^\s*8\s*$'],
+                'response': self.handle_support_training
+            },
+            'pricing': {
+                'patterns': [r'price', r'magkano', r'cost', r'how much', r'fee', r'bayad', r'presyo', r'^9$', r'^\s*9\s*$'],
+                'response': self.handle_pricing
             },
             'yes_response': {
-                'patterns': [r'^yes$', r'^yes\s*$', r'^oo$', r'^sige$', r'^sure$', r'^okay$', r'^9$', r'^\s*9\s*$'],
+                'patterns': [r'^yes$', r'^yes\s*$', r'^oo$', r'^sige$', r'^sure$', r'^okay$'],
                 'response': self.handle_yes
             },
             'question_10': {
@@ -211,38 +211,45 @@ class CORAAssistant:
     def handle_trusted(self, user_input, session_data):
         """Handle trust/legitimacy questions"""
         response = (
-            "Yes po 😊 CORA is designed specifically for cooperatives to help simplify operations, "
+            "Yes po! CORA is designed specifically for cooperatives to help simplify operations, "
             "improve organization, and make reporting easier.\n\n"
             "The goal po is to reduce manual workload and help cooperatives become more efficient and compliant.\n\n"
-            "We're backed by Edgepoint Solutions, Inc., a trusted IT solutions provider 😊\n\n"
+            "We're backed by Edgepoint Solutions, Inc., a trusted IT solutions provider po! 😊\n\n"
             "Interested po ba to see CORA in action?"
         )
         session_data['stage'] = 'trust_established'
         return response
     
-    def handle_manual_process(self, user_input, session_data):
-        """Handle manual process challenges"""
+    def handle_cooperative_part(self, user_input, session_data):
+        """Handle question about which part of cooperative CORA is for"""
         response = (
-            "That's actually very common po 😊\n\n"
-            "Maraming cooperatives ang nakaka-experience ng delayed reports, duplicate records, "
-            "at stressful computations dahil manual process pa rin.\n\n"
-            "CORA helps automate these tasks para mas mabilis, organized, at less hassle ang operations.\n\n"
-            "What is your biggest challenge po ngayon sa operations or reporting?"
+            "CORA po is designed for the ENTIRE cooperative operations! 😊\n\n"
+            "Specifically, it helps:\n"
+            "✅ Board & Management – real-time reports and decision-making\n"
+            "✅ Accounting Department – automated bookkeeping and reports\n"
+            "✅ Teller/Cashier – faster transactions and accurate records\n"
+            "✅ Loan Officers – streamlined loan processing and tracking\n"
+            "✅ Members – self-service portal for inquiries and transactions\n\n"
+            "All departments work in one integrated system po, so data flows seamlessly between teams! 😊\n\n"
+            "Which department po in your cooperative would benefit most from automation?"
         )
-        session_data['stage'] = 'identifying_challenges'
+        session_data['stage'] = 'cooperative_part_explained'
         return response
     
-    def handle_challenges(self, user_input, session_data):
-        """Handle challenge identification"""
-        # Extract challenges from user input
+    def handle_support_training(self, user_input, session_data):
+        """Handle support and training questions"""
         response = (
-            "I understand po 😊 That's exactly what CORA was designed to solve.\n\n"
-            "Many cooperatives face similar challenges, and CORA has helped them become more efficient.\n\n"
-            "Would you be interested po ba to see how CORA can specifically help your cooperative? "
-            "We offer a FREE guided demo 😊"
+            "Opo! We provide comprehensive support and training po! 😊\n\n"
+            "Our support includes:\n"
+            "✅ Initial training for all users\n"
+            "✅ User guides and documentation\n"
+            "✅ Email and chat support during business hours\n"
+            "✅ Regular system updates and new features\n"
+            "✅ Ongoing assistance via email at support@edgepoint.ph\n\n"
+            "We want to make sure your cooperative gets the most out of CORA po! 😊\n\n"
+            "Would you like po details about our training program?"
         )
-        session_data['stage'] = 'ready_for_demo'
-        session_data['challenges_noted'] = user_input
+        session_data['stage'] = 'support_training_explained'
         return response
     
     def handle_yes(self, user_input, session_data):
@@ -361,13 +368,13 @@ class CORAAssistant:
                     "You can also ask me po by typing the number:\n"
                     "1. What is CORA?\n"
                     "2. Ano ang mga features?\n"
-                    "3. Magkano ang price?\n"
-                    "4. Paano magdemo?\n"
-                    "5. Need internet ba?\n"
-                    "6. Legit ba kayo?\n"
-                    "7. Para saan bahagi ng cooperative?\n"
-                    "8. Online or offline?\n"
-                    "9. Support and training?\n"
+                    "3. Paano magdemo?\n"
+                    "4. Need internet ba?\n"
+                    "5. Legit ba kayo?\n"
+                    "6. Para saan bahagi ng cooperative?\n"
+                    "7. Online or offline?\n"
+                    "8. Support and training?\n"
+                    "9. Magkano ang price?\n"
                     "10. How soon can we start?\n"
                     "11. Ano ang mga benepisyo ng CORA?\n"
                     "12. Paano ito tumutulong sa pagbabayad ng utang?\n"
@@ -377,9 +384,9 @@ class CORAAssistant:
                 )
         else:
             responses = [
-                "That's a great question po 😊 Can you tell me more po about what you're looking for?",
-                "Interesting po 😊 How can CORA help your cooperative with that?",
-                "I appreciate po the question 😊 Maybe I can help better if you share po more about your cooperative's current setup?"
+                "That's a great question po! Can you tell me more po about what you're looking for?",
+                "Interesting po! How can CORA help your cooperative with that?",
+                "I appreciate po the question! Maybe I can help better if you share po more about your cooperative's current setup?"
             ]
             # Add the question list to encourage numeric input
             base_response = responses[0] if len(responses) > 0 else responses[0]
@@ -388,13 +395,13 @@ class CORAAssistant:
                 "Or you can simply type a number from 1-15 to ask your question! 😊\n\n"
                 "1. What is CORA?\n"
                 "2. Ano ang mga features?\n"
-                "3. Magkano ang price?\n"
-                "4. Paano magdemo?\n"
-                "5. Need internet ba?\n"
-                "6. Legit ba kayo?\n"
-                "7. Para saan bahagi ng cooperative?\n"
-                "8. Online or offline?\n"
-                "9. Support and training?\n"
+                "3. Paano magdemo?\n"
+                "4. Need internet ba?\n"
+                "5. Legit ba kayo?\n"
+                "6. Para saan bahagi ng cooperative?\n"
+                "7. Online or offline?\n"
+                "8. Support and training?\n"
+                "9. Magkano ang price?\n"
                 "10. How soon can we start?\n"
                 "11. Ano ang mga benepisyo ng CORA?\n"
                 "12. Paano ito tumutulong sa pagbabayad ng utang?\n"
@@ -410,13 +417,13 @@ class CORAAssistant:
         handlers = {
             1: self.handle_what_is_cora,
             2: self.handle_features,
-            3: self.handle_pricing,
-            4: self.handle_demo,
-            5: self.handle_online_offline,
-            6: self.handle_trusted,
-            7: self.handle_manual_process,
-            8: self.handle_challenges,
-            9: self.handle_yes,
+            3: self.handle_demo,
+            4: self.handle_online_offline,
+            5: self.handle_trusted,
+            6: self.handle_cooperative_part,
+            7: self.handle_online_offline,
+            8: self.handle_support_training,
+            9: self.handle_pricing,
             10: self.handle_question_10,
             11: self.handle_question_11,
             12: self.handle_question_12,

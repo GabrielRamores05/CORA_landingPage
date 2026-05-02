@@ -72,8 +72,7 @@ class CORAChat {
       
       <!-- Chat Toggle Button (Minimized) -->
       <button class="cora-chat-toggle" id="cora-toggle-btn" style="display: ${this.isOpen ? 'none' : 'flex'};">
-        <span class="cora-chat-toggle-icon">💬</span>
-        <span class="cora-chat-toggle-label">Chat with us!</span>
+        <span class="cora-chat-toggle-label">Chat Us!</span>
       </button>
     `;
     
