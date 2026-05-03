@@ -519,12 +519,17 @@ src="https://www.facebook.com/tr?id=2132083164253304&ev=PageView&noscript=1"
       <div class="modal-body">
         <form id="bookingForm" onsubmit="submitBooking(event)">
           <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
           </div>
 
           <div class="form-group">
-            <label for="coop">Cooperative Name</label>
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name">
+          </div>
+
+          <div class="form-group">
+            <label for="coop">Name of Cooperative</label>
             <input type="text" id="coop" name="coop" required placeholder="Enter cooperative name">
           </div>
 
@@ -534,30 +539,29 @@ src="https://www.facebook.com/tr?id=2132083164253304&ev=PageView&noscript=1"
           </div>
 
           <div class="form-group">
-            <label for="phone">Phone Number</label>
+            <label for="phone">Phone No.</label>
             <input type="tel" id="phone" name="phone" required placeholder="09XX XXX XXXX">
           </div>
 
           <div class="form-group">
-            <label>Select Demo Date (May 2026)</label>
-            <div class="date-options">
-              <div class="date-option">
-                <input type="radio" id="may8" name="date" value="May 8, 2026" required>
-                <label for="may8">
-                  May 8
-                  <span>Friday</span>
-                </label>
-              </div>
+            <label>Fixed Schedule</label>
+            <div class="demo-schedule-display">
+              <strong>Demo Date and Time:</strong> May 8, 3:00–4:00 PM
+              <input type="hidden" id="date" name="date" value="May 8, 3:00–4:00 PM">
             </div>
           </div>
 
           <div class="form-group">
-            <label for="questions">Questions or Specific Needs</label>
-            <textarea id="questions" name="questions"
-              placeholder="Tell us what you'd like to see in the demo..."></textarea>
+            <div class="checkbox-group">
+              <input type="checkbox" id="subscribe" name="subscribe" required>
+              <label for="subscribe" class="checkbox-label">
+                By checking this box, you agree to subscribe to our email list and give us permission to send you newsletters, updates, and announcements. You can unsubscribe at any time. If you agree, please check the box to subscribe.
+              </label>
+            </div>
+            <p class="privacy-note">We value your privacy and will never spam you. Your details are 100% safe. 🔒</p>
           </div>
 
-          <button type="submit" class="form-submit">Confirm Booking</button>
+          <button type="submit" class="form-submit">Secure My Spot in the Free Demo</button>
         </form>
       </div>
     </div>

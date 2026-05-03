@@ -1337,6 +1337,63 @@ body {
   box-shadow: 0 8px 20px var(--orange-glow);
 }
 
+/* CHECKBOX GROUP */
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  margin-top: 3px;
+  cursor: pointer;
+  accent-color: var(--orange);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 4px;
+}
+
+.checkbox-label {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--gray-600);
+  margin-bottom: 0 !important;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* PRIVACY NOTE */
+.privacy-note {
+  font-size: 12px;
+  color: #000000;
+  margin-top: 10px;
+  margin-bottom: 0;
+  padding: 10px 12px;
+  background: var(--gray-50);
+  border-radius: 8px;
+  border-left: 3px solid var(--orange);
+  line-height: 1.4;
+}
+
+/* DEMO SCHEDULE DISPLAY */
+.demo-schedule-display {
+  padding: 14px 16px;
+  background: var(--orange-light);
+  border: 1px solid rgba(224, 124, 58, 0.2);
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--gray-800);
+  line-height: 1.6;
+}
+
+.demo-schedule-display strong {
+  color: var(--orange-dark);
+  font-weight: 600;
+}
+
 /* ANIMATIONS */
 @keyframes fadeInUp {
   from {

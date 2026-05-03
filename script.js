@@ -152,10 +152,56 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Booking Modal Functions
+// === SUBMISSION LIMIT (2 Days) ===
+function checkSubmissionLimit(email) {
+  const cleanEmail = email.trim().toLowerCase();
+  const storageKey = 'cora_demo_' + cleanEmail;
+  const lastSubmission = localStorage.getItem(storageKey);
+  
+  if (!lastSubmission) {
+    return { allowed: true, daysRemaining: 0 };
+  }
+  
+  const lastSubmitTime = parseInt(lastSubmission);
+  const now = Date.now();
+  const twoDays = 1 * 24 * 60 * 60 * 1000;
+  const timePassed = now - lastSubmitTime;
+  
+  if (timePassed >= twoDays) {
+    localStorage.removeItem(storageKey);
+    return { allowed: true, daysRemaining: 0 };
+  }
+  
+  const daysRemaining = Math.ceil((twoDays - timePassed) / (24 * 60 * 60 * 1000));
+  return { allowed: false, daysRemaining: daysRemaining };
+}
+
+function updateSubmitButton() {
+  const emailInput = document.getElementById('email');
+  const submitBtn = document.querySelector('.form-submit');
+  
+  if (!emailInput || !submitBtn || !emailInput.value) return;
+  
+  const limitCheck = checkSubmissionLimit(emailInput.value.trim().toLowerCase());
+  
+  if (!limitCheck.allowed) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = `Please wait ${limitCheck.daysRemaining} day(s) to send another request`;
+    submitBtn.style.opacity = '0.6';
+    submitBtn.style.cursor = 'not-allowed';
+  } else {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Secure My Spot in the Free Demo';
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
+  }
+}
+
 function openBookingModal(e) {
   e.preventDefault();
   document.getElementById('bookingModal').classList.add('active');
   document.body.style.overflow = 'hidden';
+  updateSubmitButton();
   if (typeof fbq === 'function') {
     fbq('trackCustom', 'OpenBookingModal');
   }
@@ -168,29 +214,51 @@ function closeBookingModal() {
 
 function submitBooking(e) {
   e.preventDefault();
+  
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const limitCheck = checkSubmissionLimit(email);
+  
+  if (!limitCheck.allowed) {
+    alert(`Your message has been sent. Please wait ${limitCheck.daysRemaining} day(s) to send another request.`);
+    return;
+  }
+  
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
   emailjs.init("wU74bNn0Kht8Sa4J4");
 
+  // Get firstName and lastName separately
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
+
+  // Check if subscription checkbox is checked
+  const isSubscribed = document.getElementById("subscribe").checked;
+
   const emailParams = {
-    from_name: document.getElementById("name").value,
+    first_name: firstName,
+    last_name: lastName,
     from_email: document.getElementById("email").value,
     cooperative_name: document.getElementById("coop").value,
     phone: document.getElementById("phone").value,
-    demo_date: document.querySelector('input[name="date"]:checked')?.value || '',
-    questions: document.getElementById("questions").value,
+    demo_date: document.getElementById("date").value || 'May 8, 3:00–4:00 PM',
+    subscribed: isSubscribed ? 'User has checked the subscription box, agreeing to receive newsletters, updates, and announcements. The user may unsubscribe at any time.' : 'User has not checked the subscription box; no consent to receive newsletters, updates, and announcements.',
     to_email: 'edgepoint.solutions.inc@gmail.com'
   };
 
   emailjs.send("service_aay4edu", "template_os99snq", emailParams)
     .then(function(response) {
       console.log('Email sent successfully!', response.status, response.text);
+      
+      // Store submission timestamp in localStorage (2-day limit)
+      const storageKey = 'cora_demo_' + email;
+      localStorage.setItem(storageKey, Date.now().toString());
+      
       if (typeof fbq === 'function') {
         fbq('track', 'Lead', { content_name: 'Free Demo Booking' });
         fbq('track', 'Schedule');
       }
-      alert('Thank you! Your free demo has been booked. We will send you a confirmation email shortly.');
+      alert('We sent you the link of online demo already in your Gmail. See you there!');
       closeBookingModal();
       e.target.reset();
     }, function(error) {
