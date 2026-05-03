@@ -1171,12 +1171,18 @@ body {
   background: white;
   border-radius: 20px;
   width: 90%;
-  max-width: 500px;
+  max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    max-width: 700px;
+  }
 }
 
 .modal-header {

@@ -223,6 +223,15 @@ function submitBooking(e) {
     return;
   }
   
+  // Validate phone number - must have exactly 11 digits
+  const phone = document.getElementById("phone").value.trim();
+  const phoneDigits = phone.replace(/\D/g, '');
+  
+  if (phoneDigits.length !== 11) {
+    alert('Phone number must contain exactly 11 digits.');
+    return;
+  }
+  
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
@@ -241,6 +250,7 @@ function submitBooking(e) {
     from_email: document.getElementById("email").value,
     cooperative_name: document.getElementById("coop").value,
     phone: document.getElementById("phone").value,
+    facebook: document.getElementById("facebook").value,
     demo_date: document.getElementById("date").value || 'May 8, 3:00–4:00 PM',
     subscribed: isSubscribed ? 'User has checked the subscription box, agreeing to receive newsletters, updates, and announcements. The user may unsubscribe at any time.' : 'User has not checked the subscription box; no consent to receive newsletters, updates, and announcements.',
     to_email: 'edgepoint.solutions.inc@gmail.com'
