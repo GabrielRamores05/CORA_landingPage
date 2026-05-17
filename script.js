@@ -251,7 +251,7 @@ function submitBooking(e) {
     cooperative_name: document.getElementById("coop").value,
     phone: document.getElementById("phone").value,
     facebook: document.getElementById("facebook").value,
-    demo_date: document.getElementById("date").value || 'May 18, 3:00–4:00 PM',
+    demo_date: document.getElementById("date").value || 'May 22, 3:00–4:00 PM',
     subscribed: isSubscribed ? 'User has checked the subscription box, agreeing to receive newsletters, updates, and announcements. The user may unsubscribe at any time.' : 'User has not checked the subscription box; no consent to receive newsletters, updates, and announcements.',
     to_email: 'edgepoint.solutions.inc@gmail.com'
   };
