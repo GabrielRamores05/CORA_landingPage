@@ -167,7 +167,7 @@ QUESTION_LIMITS = {
 # Demo Dates Configuration
 DEMO_DATES = [
     {"date": "May 8, 2026", "day": "Friday", "available": True},
-    {"date": "May 15, 2026", "day": "Friday", "available": True},
+    {"date": "May 18, 2026", "day": "Friday", "available": True},
     {"date": "May 22, 2026", "day": "Friday", "available": True},
     {"date": "May 29, 2026", "day": "Friday", "available": True},
 ]
