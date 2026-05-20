@@ -53,16 +53,16 @@ export default function BookingForm({onSuccess}: Props){
         <input name="from_email" className={styles.input} placeholder="Email" type="email" required />
         <input name="coop" className={styles.input} placeholder="Cooperative name" />
       </div>
-      <div className={styles.row}>
-        <input name="phone" className={styles.input} placeholder="Phone (11 digits)" />
-        <input name="facebook" className={styles.input} placeholder="Facebook page or contact" />
-      </div>
-        <div>
-          <input type="hidden" name="schedule" value="May 22, 3:00pm-4:00pm" />
-        </div>
-      <div>
-        <textarea name="message" className={styles.textarea} placeholder="Tell us your challenge or message" />
-      </div>
+       <div className={styles.row}>
+         <input name="phone" className={styles.input} placeholder="Phone (11 digits)" />
+         <input name="facebook" className={styles.input} placeholder="Facebook page or contact" />
+       </div>
+       <div>
+         <input type="hidden" name="schedule" value="May 22, 3:00pm-4:00pm" />
+       </div>
+       <div>
+         <textarea name="message" className={styles.textarea} placeholder="Tell us your challenge or message" />
+       </div>
       <label className={styles.checkboxRow}>
         <input type="checkbox" checked={subscribe} onChange={() => setSubscribe(!subscribe)} />
         I agree to receive updates and event announcements from CORA.
