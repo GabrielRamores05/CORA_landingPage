@@ -1,0 +1,160 @@
+/* ===================================================================
+   CORA Design System — Foundation
+   Professional corporate SaaS design tokens & resets
+   =================================================================== */
+
+:root {
+  /* Brand Colors */
+  --orange: #E07C3A;
+  --orange-hover: #C96A2E;
+  --orange-light: #FF9F43;
+  --orange-50: rgba(224, 124, 58, 0.06);
+  --orange-100: rgba(224, 124, 58, 0.10);
+  --orange-200: rgba(224, 124, 58, 0.16);
+
+  /* Neutrals */
+  --dark: #0F1419;
+  --dark-800: #1A2029;
+  --gray-900: #212936;
+  --gray-700: #3D4A58;
+  --gray-600: #5A6674;
+  --gray-500: #7A8694;
+  --gray-400: #9CA6B0;
+  --gray-300: #C4CCD4;
+  --gray-200: #E2E7EC;
+  --gray-100: #F1F4F7;
+  --gray-50: #F8FAFB;
+  --white: #FFFFFF;
+
+  /* Section Backgrounds */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #FAFBFC;
+  --bg-tertiary: #F5F6F8;
+  --bg-warm: #FBF8F5;
+  --bg-dark: #0F1419;
+
+  /* Typography */
+  --font-heading: 'Sora', sans-serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Type Scale */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.8125rem;   /* 13px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+
+  /* Shadows — restrained, professional */
+  --shadow-xs: 0 1px 2px rgba(15, 20, 25, 0.05);
+  --shadow-sm: 0 1px 3px rgba(15, 20, 25, 0.06), 0 1px 2px rgba(15, 20, 25, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 20, 25, 0.06), 0 2px 4px -2px rgba(15, 20, 25, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 20, 25, 0.06), 0 4px 6px -4px rgba(15, 20, 25, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 20, 25, 0.06), 0 8px 10px -6px rgba(15, 20, 25, 0.04);
+  --shadow-card: 0 1px 3px rgba(15, 20, 25, 0.04), 0 0 0 1px rgba(15, 20, 25, 0.03);
+  --shadow-card-hover: 0 8px 24px rgba(15, 20, 25, 0.08), 0 0 0 1px rgba(15, 20, 25, 0.04);
+  --shadow-orange-sm: 0 4px 14px rgba(224, 124, 58, 0.20);
+  --shadow-orange-lg: 0 8px 24px rgba(224, 124, 58, 0.25);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+
+  /* Layout */
+  --max-width: 1140px;
+  --nav-height: 72px;
+  --section-gap: 96px;
+  --section-gap-mobile: 64px;
+}
+
+/* === Reset === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html, body, #__next {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--dark);
+  background: var(--white);
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--dark);
+}
+
+/* === Global Keyframes === */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}

@@ -1,0 +1,114 @@
+.featuresSection {
+  padding: var(--section-gap) 0;
+  background-color: var(--bg-primary);
+}
+
+.featuresHeader {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.featuresLabel {
+  color: var(--orange);
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.featuresTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3.5vw, 38px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+}
+
+.featuresSubtitle {
+  color: var(--gray-600);
+  font-size: var(--text-base);
+  line-height: 1.8;
+}
+
+.bentoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+.bentoCard {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  border: 1px solid rgba(224, 124, 58, 0.1);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.bentoCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(224, 124, 58, 0.25);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.bentoIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(224, 124, 58, 0.08);
+  color: var(--orange);
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.bentoCard:hover .bentoIcon {
+  background: rgba(224, 124, 58, 0.14);
+  transform: scale(1.05);
+}
+
+.bentoTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin: 0;
+  color: var(--dark);
+}
+
+.bentoDesc {
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .bentoGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .featuresSection {
+    padding: var(--section-gap-mobile) 0;
+  }
+  .bentoGrid {
+    grid-template-columns: 1fr;
+  }
+  .bentoCard {
+    padding: 24px;
+  }
+}

@@ -1,0 +1,172 @@
+.workflowSection {
+  padding: var(--section-gap) 0;
+  background-color: var(--bg-tertiary);
+  border-top: 1px solid rgba(21, 41, 54, 0.03);
+  border-bottom: 1px solid rgba(21, 41, 54, 0.03);
+}
+
+.header {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.label {
+  text-transform: uppercase;
+  color: var(--orange);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: var(--text-xs);
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3.5vw, 38px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--dark);
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  color: var(--gray-600);
+  font-size: var(--text-base);
+  line-height: 1.8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(21, 41, 54, 0.05);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(224, 124, 58, 0.15);
+}
+
+/* macOS Browser Frame Mockup */
+.browserFrame {
+  background: var(--gray-100);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.browserHeader {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: var(--white);
+  border-bottom: 1px solid rgba(21, 41, 54, 0.05);
+  gap: 16px;
+}
+
+.browserDots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot:nth-child(1) { background-color: #FF5F56; }
+.dot:nth-child(2) { background-color: #FFBD2E; }
+.dot:nth-child(3) { background-color: #27C93F; }
+
+.browserUrlBar {
+  flex: 1;
+  background-color: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--gray-500);
+  padding: 3px 12px;
+  font-family: var(--font-body);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.imageContainer {
+  overflow: hidden;
+  position: relative;
+  background: var(--gray-50);
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.card:hover .image {
+  transform: scale(1.02);
+}
+
+.caption {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.caption h3 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0;
+}
+
+.caption p {
+  color: var(--gray-600);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .workflowSection {
+    padding: var(--section-gap-mobile) 0;
+  }
+  .caption {
+    padding: 20px;
+  }
+}

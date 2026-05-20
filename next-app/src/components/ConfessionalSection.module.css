@@ -1,0 +1,127 @@
+.confessionalSection {
+  padding: var(--section-gap) 0;
+  background-color: var(--bg-primary);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 52px;
+  align-items: flex-start;
+  margin: 0 auto;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: 100px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  color: var(--orange);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: var(--text-xs);
+  display: inline-block;
+}
+
+.headline {
+  font-family: var(--font-heading);
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--dark);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  color: var(--gray-600);
+  font-size: var(--text-base);
+  line-height: 1.8;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.item {
+  display: flex;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  border: 1px solid rgba(224, 124, 58, 0.08);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--duration-normal) var(--ease-standard);
+  align-items: flex-start;
+}
+
+.item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(224, 124, 58, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.arrow {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+  background: rgba(224, 124, 58, 0.1);
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.item p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--gray-700);
+}
+
+.item strong {
+  color: var(--dark);
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.resolve {
+  margin-top: 8px;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: var(--dark);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.7;
+  box-shadow: var(--shadow-lg);
+  border-left: 4px solid var(--orange);
+}
+
+@media (max-width: 992px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .left {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .confessionalSection {
+    padding: var(--section-gap-mobile) 0;
+  }
+  .item {
+    padding: 16px 20px;
+  }
+}

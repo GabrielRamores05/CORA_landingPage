@@ -1,0 +1,81 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 25, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.dialog {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  max-width: 600px;
+  width: calc(100% - 32px);
+  padding: 36px;
+  position: relative;
+  box-shadow: 0 24px 48px -12px rgba(15, 20, 25, 0.16);
+  border: 1px solid rgba(15, 20, 25, 0.05);
+  animation: fadeInUp var(--duration-slow) var(--ease-out);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
+@media (max-width: 580px) {
+  .dialog {
+    padding: 24px;
+    margin: 16px;
+  }
+}
+
+.heading {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+}
+
+.subheading {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  color: var(--gray-500);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.closeBtn:hover {
+  background: var(--gray-100);
+  color: var(--dark);
+  border-color: var(--gray-200);
+  transform: rotate(90deg);
+}
+
+.closeBtn:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(224, 124, 58, 0.12);
+}

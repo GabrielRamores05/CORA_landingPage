@@ -1,0 +1,8 @@
+/* ===================================================================
+   Section Backgrounds — Alternating pattern for visual rhythm
+   =================================================================== */
+
+.bg-white    { background-color: var(--bg-primary); }
+.bg-light    { background-color: var(--bg-secondary); }
+.bg-warm     { background-color: var(--bg-warm); }
+.bg-dark     { background-color: var(--bg-dark); color: var(--white); }
