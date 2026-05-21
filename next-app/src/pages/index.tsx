@@ -401,8 +401,8 @@ export default function Home() {
                   <Image
                     src="/images/Hero1.png"
                     alt="Founder portrait"
-                    width={360}
-                    height={420}
+                    width={1920}
+                    height={1920}
                     className={styles.founderPortrait}
                     priority
                   />
