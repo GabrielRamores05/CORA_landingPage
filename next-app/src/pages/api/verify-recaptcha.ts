@@ -6,6 +6,7 @@ type Response = {
   message?: string
   score?: number
   waitHours?: number
+  debug?: string
 }
 
 export default async function handler(
@@ -27,6 +28,27 @@ export default async function handler(
   }
 
   try {
+    // Skip reCAPTCHA verification in development
+    if (token.startsWith('dev-token-')) {
+      console.log('Development mode: reCAPTCHA verification skipped')
+      
+      // Still check rate limit
+      const rateLimitCheck = checkRateLimit(email)
+      if (!rateLimitCheck.allowed) {
+        return res.status(429).json({
+          success: false,
+          message: `You have already submitted. Please try again in ${rateLimitCheck.waitHours} hour(s).`,
+          waitHours: rateLimitCheck.waitHours,
+        })
+      }
+
+      recordSubmission(email)
+      return res.status(200).json({
+        success: true,
+        message: 'Verification successful (dev mode)',
+      })
+    }
+
     // Check rate limit first (before reCAPTCHA verification)
     const rateLimitCheck = checkRateLimit(email)
     if (!rateLimitCheck.allowed) {
@@ -40,15 +62,19 @@ export default async function handler(
     // Verify reCAPTCHA token
     const secretKey = '6LfHDvYsAAAAAMd-afaCejcKuEyv2KkVieK5HLqt'
 
-    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+    const verifyUrl = 'https://www.google.com/recaptcha/api/siteverify'
+    const formData = new URLSearchParams()
+    formData.append('secret', secretKey)
+    formData.append('response', token)
+
+    const response = await fetch(verifyUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=${secretKey}&response=${token}`,
+      body: formData,
     })
 
     const data = await response.json()
+
+    console.log('reCAPTCHA response:', data)
 
     // reCAPTCHA v2 Invisible returns success: true/false
     if (data.success) {
@@ -63,7 +89,8 @@ export default async function handler(
       console.error('reCAPTCHA verification failed:', data)
       return res.status(400).json({
         success: false,
-        message: 'reCAPTCHA verification failed',
+        message: 'reCAPTCHA verification failed. Please try again.',
+        debug: `reCAPTCHA error codes: ${data['error-codes']?.join(', ') || 'unknown'}`,
       })
     }
   } catch (error) {
@@ -71,6 +98,7 @@ export default async function handler(
     return res.status(500).json({
       success: false,
       message: 'Internal server error',
+      debug: error instanceof Error ? error.message : 'Unknown error',
     })
   }
 }

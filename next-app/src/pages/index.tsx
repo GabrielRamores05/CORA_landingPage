@@ -330,7 +330,7 @@ export default function Home() {
             <div>
               <p className={styles.pageIntro}>Makipag-ugnayan sa CORA team para sa iyong cooperative.</p>
               <h1 className={styles.pageHeading}>
-                Contact kami para mag-set ng demo at consultation.
+                Contact us para mag-set ng demo at consultation.
               </h1>
               <p className={styles.pageIntro}>
                 Available kami para sa onboarding, live coaching, at pagtulong sa cooperative operations ng inyong organization.
@@ -399,7 +399,7 @@ export default function Home() {
                 <div className={styles.founderCard}>
                   <span className={styles.founderBadge}>FOUNDER</span>
                   <Image
-                    src="/images/hero1.png"
+                    src="/images/Hero1.png"
                     alt="Founder portrait"
                     width={360}
                     height={420}

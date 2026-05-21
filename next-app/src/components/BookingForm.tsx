@@ -32,24 +32,57 @@ export default function BookingForm({ onSuccess }: Props) {
 
   function getRecaptchaToken(): Promise<string | null> {
     return new Promise((resolve) => {
-      const win = typeof window !== 'undefined' ? (window as CustomWindow) : null
-      if (!win?.grecaptcha) {
-        resolve(null)
+      // Skip reCAPTCHA in development (localhost)
+      const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      if (isDev) {
+        console.log('Development mode: reCAPTCHA skipped')
+        resolve('dev-token-' + Date.now())
         return
       }
-      try {
-        win.grecaptcha.execute('6LfHDvYsAAAAAMkthB95TDFTan-ZUi9Jq7ltJdeI', { action: 'submit' }).then((token: string) => {
-          resolve(token)
-        }).catch(() => resolve(null))
-      } catch (err) {
-        console.error('reCAPTCHA error:', err)
-        resolve(null)
+
+      const win = typeof window !== 'undefined' ? (window as CustomWindow) : null
+      if (!win?.grecaptcha) {
+        // Wait for grecaptcha to load
+        let attempts = 0
+        const checkInterval = setInterval(() => {
+          attempts++
+          if ((window as CustomWindow).grecaptcha) {
+            clearInterval(checkInterval)
+            executeRecaptcha(resolve)
+          } else if (attempts > 50) {
+            // Timeout after 5 seconds
+            clearInterval(checkInterval)
+            console.error('reCAPTCHA script failed to load')
+            resolve(null)
+          }
+        }, 100)
+        return
       }
+      executeRecaptcha(resolve)
     })
+  }
+
+  function executeRecaptcha(resolve: (token: string | null) => void): void {
+    try {
+      const win = window as CustomWindow
+      win.grecaptcha.execute('6LfHDvYsAAAAAMkthB95TDFTan-ZUi9Jq7ltJdeI', { action: 'submit' })
+        .then((token: string) => {
+          console.log('reCAPTCHA token received')
+          resolve(token)
+        })
+        .catch((err: any) => {
+          console.error('reCAPTCHA execute error:', err)
+          resolve(null)
+        })
+    } catch (err) {
+      console.error('reCAPTCHA execute exception:', err)
+      resolve(null)
+    }
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const form = e.currentTarget
     setLoading(true)
     setMessage(null)
     setSuccess(null)
@@ -65,7 +98,6 @@ export default function BookingForm({ onSuccess }: Props) {
       }
 
       // Get email from form for rate limiting check
-      const form = e.currentTarget
       const emailInput = form.querySelector('input[name="from_email"]') as HTMLInputElement
       const email = emailInput?.value || ''
 
@@ -84,6 +116,7 @@ export default function BookingForm({ onSuccess }: Props) {
       })
 
       const verifyData = await verifyResponse.json()
+      console.log('Verification response:', verifyData, 'Status:', verifyResponse.status)
       if (!verifyData.success) {
         setMessage(verifyData.message || 'Verification failed. Please try again.')
         setSuccess(false)
