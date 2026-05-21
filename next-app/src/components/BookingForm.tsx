@@ -65,15 +65,23 @@ export default function BookingForm({ onSuccess }: Props) {
   function executeRecaptcha(resolve: (token: string | null) => void): void {
     try {
       const win = window as CustomWindow
-      win.grecaptcha.execute('6LfHDvYsAAAAAMkthB95TDFTan-ZUi9Jq7ltJdeI', { action: 'submit' })
-        .then((token: string) => {
-          console.log('reCAPTCHA token received')
-          resolve(token)
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LfHDvYsAAAAAMkthB95TDFTan-ZUi9Jq7ltJdeI'
+      
+      if (win.grecaptcha && win.grecaptcha.ready) {
+        win.grecaptcha.ready(() => {
+          win.grecaptcha.execute(siteKey, { action: 'submit' })
+            .then((token: string) => {
+              console.log('reCAPTCHA token received')
+              resolve(token)
+            })
+            .catch((err: any) => {
+              console.error('reCAPTCHA execute error:', err)
+              resolve(null)
+            })
         })
-        .catch((err: any) => {
-          console.error('reCAPTCHA execute error:', err)
-          resolve(null)
-        })
+      } else {
+        resolve(null)
+      }
     } catch (err) {
       console.error('reCAPTCHA execute exception:', err)
       resolve(null)

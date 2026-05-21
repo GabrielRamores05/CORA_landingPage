@@ -60,7 +60,7 @@ export default async function handler(
     }
 
     // Verify reCAPTCHA token
-    const secretKey = '6LfHDvYsAAAAAMd-afaCejcKuEyv2KkVieK5HLqt'
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY || '6LfHDvYsAAAAAMd-afaCejcKuEyv2KkVieK5HLqt'
 
     const verifyUrl = 'https://www.google.com/recaptcha/api/siteverify'
     const formData = new URLSearchParams()
