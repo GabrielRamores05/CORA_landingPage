@@ -5,6 +5,7 @@ type Props = { onSuccess?: () => void }
 type CustomWindow = typeof window & { 
   grecaptcha?: any
   emailjs?: any
+  grecaptchaWidgetId?: number
 }
 
 export default function BookingForm({ onSuccess }: Props) {
@@ -67,19 +68,47 @@ export default function BookingForm({ onSuccess }: Props) {
       const win = window as CustomWindow
       const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LfHDvYsAAAAAMkthB95TDFTan-ZUi9Jq7ltJdeI'
       
-      if (win.grecaptcha && win.grecaptcha.ready) {
+      console.log('grecaptcha available:', !!win.grecaptcha)
+      console.log('siteKey:', siteKey)
+      
+      if (win.grecaptcha && typeof win.grecaptcha.ready === 'function') {
         win.grecaptcha.ready(() => {
-          win.grecaptcha.execute(siteKey, { action: 'submit' })
-            .then((token: string) => {
-              console.log('reCAPTCHA token received')
-              resolve(token)
-            })
-            .catch((err: any) => {
-              console.error('reCAPTCHA execute error:', err)
+          console.log('grecaptcha.ready callback executed')
+          // Render invisible reCAPTCHA if not already rendered
+          if (win.grecaptchaWidgetId === undefined) {
+            console.log('Rendering reCAPTCHA widget...')
+            try {
+              const widgetId = win.grecaptcha.render('dummy-recaptcha', {
+                sitekey: siteKey,
+                size: 'invisible',
+                badge: 'inline',
+                callback: (token: string) => {
+                  console.log('reCAPTCHA token received')
+                  resolve(token)
+                },
+                'expired-callback': () => {
+                  console.error('reCAPTCHA expired')
+                  resolve(null)
+                },
+                'error-callback': () => {
+                  console.error('reCAPTCHA error')
+                  resolve(null)
+                }
+              })
+              console.log('Widget ID returned:', widgetId)
+              win.grecaptchaWidgetId = widgetId
+            } catch (renderErr) {
+              console.error('reCAPTCHA render error:', renderErr)
               resolve(null)
-            })
+              return
+            }
+          }
+          // Execute the widget
+          console.log('Executing reCAPTCHA with widgetId:', win.grecaptchaWidgetId)
+          win.grecaptcha.execute(win.grecaptchaWidgetId)
         })
       } else {
+        console.error('grecaptcha.ready not available')
         resolve(null)
       }
     } catch (err) {
@@ -184,6 +213,7 @@ export default function BookingForm({ onSuccess }: Props) {
 
   return (
     <form ref={formRef} className={styles.form} onSubmit={handleSubmit} noValidate>
+      <div id="dummy-recaptcha" style={{ display: 'none' }}></div>
       <div className={styles.row}>
         <label htmlFor="first_name" className={styles.label}>First name
           <input id="first_name" name="first_name" className={styles.input} placeholder="First name" required aria-required="true" />

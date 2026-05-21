@@ -18,7 +18,16 @@ class MyDocument extends Document {
           <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
           {/* reCAPTCHA v2 Invisible */}
-          <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                function onRecaptchaLoad() {
+                  console.log('reCAPTCHA loaded');
+                }
+              `,
+            }}
+          />
+          <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
 
           {/* Confetti animation */}
           <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
