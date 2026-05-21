@@ -1,0 +1,560 @@
+.landingShell {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  height: auto;
+  width: 100%;
+  background: linear-gradient(180deg, #FFFBF8 0%, #FFFFFF 100%);
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.mainPanel {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px;
+  overflow: visible;
+}
+
+.contentCard {
+  width: 100%;
+  max-width: 1100px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 28px;
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  overflow: visible;
+  position: relative;
+}
+
+.contentBody {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+}
+
+.contentShell {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.outsideNav {
+  display: none;
+}
+
+.sideNavButton {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-sm);
+  pointer-events: auto;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  color: var(--white);
+  border: none;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.sideNavButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.navigationFooter {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.navButton {
+  flex: 1;
+  min-width: 180px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 20, 25, 0.08);
+  background: #fff;
+  color: var(--dark);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 180ms var(--ease-standard), color 180ms var(--ease-standard);
+}
+
+.navButton:hover:not(:disabled) {
+  background: var(--orange);
+  color: var(--white);
+  border-color: transparent;
+}
+
+.navButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.navButton.sideNavButton {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  color: var(--white);
+  border: none;
+}
+
+.prevButton:hover:not(:disabled),
+.nextButton:hover:not(:disabled) {
+  background: var(--orange);
+  color: var(--white);
+  border-color: transparent;
+}
+
+@media (max-width: 1024px) {
+  .navigationFooter {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .navButton {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .outsideNav {
+    justify-content: space-between;
+    padding: 0 14px;
+  }
+
+  .sideNavButton {
+    width: 42px;
+    height: 42px;
+  }
+
+  .mainPanel {
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .contentCard {
+    min-height: auto;
+    padding: 32px 24px;
+  }
+
+  .contentBody {
+    overflow-y: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .outsideNav {
+    padding: 0 10px;
+  }
+
+  .sideNavButton {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+}
+
+.heroBlock {
+  display: grid;
+  grid-template-columns: 1.25fr 0.9fr;
+  gap: 36px;
+  align-items: center;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+}
+
+.pretitle {
+  color: var(--orange);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+}
+
+.pill {
+  display: inline-flex;
+  background: #fff4eb;
+  border: 1px solid rgba(224,124,58,0.12);
+  color: var(--orange);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.featureBullets {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.featureBullet {
+  color: var(--gray-700);
+  font-size: 0.98rem;
+}
+
+.founderCard {
+  position: relative;
+  width: min(100%, 360px);
+  border-radius: 20px;
+  overflow: visible;
+  background: #fff;
+  padding: 14px;
+  box-shadow: var(--shadow-lg);
+}
+
+.founderBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.quote {
+  margin-top: 12px;
+  font-style: italic;
+  color: var(--gray-600);
+}
+
+.heroImageWrapper {
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 28px;
+  box-shadow: var(--shadow-lg);
+}
+
+.founderPortrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 !important;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Make vertical scrollbar visible on content body */
+.contentBody {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15,20,25,0.12) transparent;
+}
+
+.contentBody::-webkit-scrollbar {
+  width: 12px;
+}
+
+.contentBody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contentBody::-webkit-scrollbar-thumb {
+  background: rgba(15,20,25,0.12);
+  border-radius: 999px;
+}
+
+.featureImageRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.galleryCard {
+  position: relative;
+  min-height: 180px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #f8f7f4;
+  box-shadow: var(--shadow-xs);
+}
+
+.featureImageCard {
+  position: relative;
+  min-height: 180px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow-xs);
+}
+
+.navigationFooter {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.navButton {
+  flex: 1;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 20, 25, 0.08);
+  background: #fff;
+  color: var(--dark);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 180ms var(--ease-standard), color 180ms var(--ease-standard);
+}
+
+.navButton:hover:not(:disabled) {
+  background: var(--orange);
+  color: var(--white);
+  border-color: transparent;
+}
+
+.navButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Ensure side navigation buttons keep CTA styling even though they share .navButton */
+.navButton.sideNavButton {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  color: var(--white);
+  border: none;
+}
+
+.prevButton:hover:not(:disabled),
+.nextButton:hover:not(:disabled) {
+  background: var(--orange);
+  color: var(--white);
+  border-color: transparent;
+}
+
+.pageHeading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.pageIntro {
+  max-width: 760px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--gray-700);
+}
+
+.lead {
+  font-size: 1.08rem;
+  color: var(--gray-800);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.pageHighlight {
+  color: var(--orange);
+}
+
+.ctaBlock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.02rem;
+  padding: 18px 34px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-orange-sm);
+  transition: transform 180ms var(--ease-standard), box-shadow 180ms var(--ease-standard);
+}
+
+.primaryCta:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.secondaryLink {
+  color: var(--orange);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.sectionBlock {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.sectionCard {
+  background: #fff7ed;
+  border: 1px solid rgba(224, 124, 58, 0.16);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: var(--shadow-xs);
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  margin-bottom: 12px;
+  font-size: 1.15rem;
+}
+
+.sectionText {
+  color: var(--gray-700);
+  line-height: 1.8;
+}
+
+.contactList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.contactItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff9f2;
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid rgba(224, 124, 58, 0.16);
+}
+
+.contactItem strong {
+  color: var(--dark);
+}
+
+.contactItemWide {
+  grid-column: span 3;
+}
+
+.contactLine {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  display: block;
+}
+@media (max-width: 1024px) {
+  .landingShell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 1000;
+  }
+
+  .mainPanel {
+    padding: 24px;
+  }
+
+  .contentCard {
+    min-height: auto;
+    padding: 32px;
+  }
+
+  .heroBlock {
+    grid-template-columns: 1fr;
+  }
+
+  .featureImageRow {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionBlock {
+    grid-template-columns: 1fr;
+  }
+
+  .contactList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentCard {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .pageHeading {
+    font-size: 2.4rem;
+  }
+
+  .ctaBlock {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primaryCta {
+    width: 100%;
+  }
+
+  .contactList {
+    gap: 12px;
+  }
+
+  .contactItem {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .contactItem strong {
+    font-size: 0.95rem;
+  }
+
+  .contactItem span,
+  .contactLine {
+    font-size: 0.9rem;
+    word-break: break-word;
+  }
+
+  .contactItemWide {
+    grid-column: span 1;
+  }
+}

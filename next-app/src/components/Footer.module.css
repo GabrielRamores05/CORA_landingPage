@@ -1,22 +1,22 @@
 .footer {
-  background: var(--dark);
+  background: #0f141a;
   color: var(--gray-400);
-  padding: 80px 24px 40px;
-  font-size: 14px;
-  line-height: 1.6;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 5px 6px 2px;
+  font-size: 12px;
+  line-height: 1.2;
+  border-top: none;
 }
 
 .inner {
-  max-width: 1100px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr;
-  gap: 48px;
-  margin-bottom: 64px;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr 1.2fr;
+  gap: 10px;
+  margin-bottom: 0;
 }
 
 /* Brand Column */
@@ -27,45 +27,52 @@
 
 .brand {
   font-family: var(--font-heading);
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--white);
-  margin-bottom: 12px;
+  margin-bottom: 4px;
   letter-spacing: -0.03em;
 }
 
 .subtitle {
   color: var(--white);
   font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 8px;
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 
 .tagline {
   color: var(--gray-400);
-  margin-bottom: 16px;
-  max-width: 320px;
+  margin-bottom: 2px;
+  max-width: 260px;
 }
 
 .company {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--gray-500);
+  margin-bottom: 0;
 }
 
 /* Links Column */
-.linksCol {
+.linkCol {
   display: flex;
   flex-direction: column;
 }
 
+.addressCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .colTitle {
   font-family: var(--font-heading);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--white);
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 
 .linksList {
@@ -74,7 +81,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
 .linksList a {
@@ -97,22 +104,53 @@
 }
 
 .contactText {
-  color: var(--gray-400);
-  margin-bottom: 20px;
-  max-width: 300px;
+  color: var(--gray-300);
+  margin: 0 0 4px;
+  max-width: 100%;
+}
+
+.actionLink {
+  color: var(--orange);
+  text-decoration: none;
+}
+
+.actionLink:hover {
+  text-decoration: underline;
+}
+
+.socialIconRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+
+.socialIcon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.socialText {
+  color: var(--gray-300);
+  font-size: 12px;
 }
 
 .consultationBtn {
   background: var(--orange);
   color: var(--white);
   font-weight: 600;
-  font-size: 14px;
-  padding: 12px 24px;
-  border-radius: var(--radius-md);
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 12px;
   border: none;
   transition: background var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
   box-shadow: var(--shadow-sm);
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 
 .consultationBtn:hover {
@@ -137,12 +175,32 @@
   text-decoration: underline;
 }
 
+.addressBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: 4px;
+}
+
+.addressTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+
+.addressText {
+  color: var(--gray-400);
+  margin: 0;
+  line-height: 1.25;
+}
+
 /* Bottom Bar */
 .bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 32px;
+  padding-top: 4px;
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--gray-500);
 }
 
@@ -161,13 +219,13 @@
 
 @media (max-width: 580px) {
   .footer {
-    padding: 60px 16px 30px;
+    padding: 12px 8px 8px;
   }
   
   .grid {
     grid-template-columns: 1fr;
-    gap: 32px;
-    margin-bottom: 40px;
+    gap: 18px;
+    margin-bottom: 20px;
   }
   
   .brandCol {

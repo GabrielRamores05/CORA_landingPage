@@ -1,77 +1,201 @@
-import { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styles from './BookingForm.module.css'
 
-type Props = { onSuccess?: ()=>void }
+type Props = { onSuccess?: () => void }
+type CustomWindow = typeof window & { 
+  grecaptcha?: any
+  emailjs?: any
+}
 
-export default function BookingForm({onSuccess}: Props){
-  const [loading,setLoading] = useState(false)
-  const [message,setMessage] = useState<string | null>(null)
-  const [subscribe,setSubscribe] = useState(false)
+export default function BookingForm({ onSuccess }: Props) {
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
+  const [success, setSuccess] = useState<boolean | null>(null)
+  const [subscribe, setSubscribe] = useState(false)
+  const formRef = useRef<HTMLFormElement | null>(null)
 
-  async function handleSubmit(e: any){
+  function triggerConfetti(): void {
+    const win = typeof window !== 'undefined' ? (window as CustomWindow & { confetti?: any }) : null
+    if (win?.confetti) {
+      try {
+        win.confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          duration: 3000,
+        })
+      } catch (err) {
+        console.error('Confetti error:', err)
+      }
+    }
+  }
+
+  function getRecaptchaToken(): Promise<string | null> {
+    return new Promise((resolve) => {
+      const win = typeof window !== 'undefined' ? (window as CustomWindow) : null
+      if (!win?.grecaptcha) {
+        resolve(null)
+        return
+      }
+      try {
+        win.grecaptcha.execute('6LfHDvYsAAAAAMkthB95TDFTan-ZUi9Jq7ltJdeI', { action: 'submit' }).then((token: string) => {
+          resolve(token)
+        }).catch(() => resolve(null))
+      } catch (err) {
+        console.error('reCAPTCHA error:', err)
+        resolve(null)
+      }
+    })
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
-    const form = e.target as HTMLFormElement
-    const formData = new FormData(form)
-    const templateParams: any = {}
-    formData.forEach((v,k)=> templateParams[k]=v)
-    templateParams.subscribed = subscribe ? 'User has subscribed to receive newsletters and updates.' : 'User did not subscribe to receive newsletters.'
+    setSuccess(null)
 
-    try{
+    try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken()
+      if (!recaptchaToken) {
+        setMessage('reCAPTCHA verification failed. Please try again.')
+        setSuccess(false)
+        setLoading(false)
+        return
+      }
+
+      // Get email from form for rate limiting check
+      const form = e.currentTarget
+      const emailInput = form.querySelector('input[name="from_email"]') as HTMLInputElement
+      const email = emailInput?.value || ''
+
+      if (!email) {
+        setMessage('Email is required.')
+        setSuccess(false)
+        setLoading(false)
+        return
+      }
+
+      // Verify token with backend (includes rate limit check)
+      const verifyResponse = await fetch('/api/verify-recaptcha', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: recaptchaToken, email }),
+      })
+
+      const verifyData = await verifyResponse.json()
+      if (!verifyData.success) {
+        setMessage(verifyData.message || 'Verification failed. Please try again.')
+        setSuccess(false)
+        setLoading(false)
+        return
+      }
+
+      // Proceed with form submission
+      const formData = new FormData(form)
+      const templateParams: Record<string, any> = {}
+      formData.forEach((v, k) => (templateParams[k] = v))
+      templateParams.subscribed = subscribe
+        ? 'User has subscribed to receive newsletters and updates.'
+        : 'User did not subscribe to receive newsletters.'
+
       const serviceId = 'service_aay4edu'
       const templateId = 'template_os99snq'
       const userId = 'wU74bNn0Kht8Sa4J4'
-      // @ts-ignore
-      if(typeof window !== 'undefined' && (window as any).emailjs){
-        // @ts-ignore
-        const emailjs = (window as any).emailjs
-        if(emailjs.init && userId) emailjs.init(userId)
+      if (typeof window !== 'undefined' && (window as CustomWindow).emailjs) {
+        const emailjs = (window as CustomWindow).emailjs
+        if (emailjs.init && userId) emailjs.init(userId)
         await emailjs.send(serviceId, templateId, templateParams)
-         setMessage('You are now registered for our may 22 demo, Thank you and see you')
+        setMessage('Congratulations! You are now registered for our May 22 demo. We\'ll send you the Google Meet link right away.')
+        setSuccess(true)
         form.reset()
         setSubscribe(false)
-        if(onSuccess) onSuccess()
+        
+        // Trigger confetti animation
+        triggerConfetti()
+        
+        if (onSuccess) onSuccess()
       } else {
         setMessage('Email service not initialized. Please check EmailJS setup.')
+        setSuccess(false)
       }
-    }catch(err:any){
+    } catch (err: any) {
       console.error(err)
       setMessage('Something went wrong. Please try again later.')
-    }finally{
+      setSuccess(false)
+    } finally {
       setLoading(false)
     }
   }
 
+  function handleCancel() {
+    formRef.current?.reset()
+    setSubscribe(false)
+    setMessage(null)
+    setSuccess(null)
+    // blur active element to dismiss virtual keyboards on mobile
+    try {
+      (document.activeElement as HTMLElement | null)?.blur()
+    } catch {
+      /* ignore */
+    }
+  }
+
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form ref={formRef} className={styles.form} onSubmit={handleSubmit} noValidate>
       <div className={styles.row}>
-        <input name="first_name" className={styles.input} placeholder="First name" required />
-        <input name="last_name" className={styles.input} placeholder="Last name" required />
+        <label htmlFor="first_name" className={styles.label}>First name
+          <input id="first_name" name="first_name" className={styles.input} placeholder="First name" required aria-required="true" />
+        </label>
+
+        <label htmlFor="last_name" className={styles.label}>Last name
+          <input id="last_name" name="last_name" className={styles.input} placeholder="Last name" required aria-required="true" />
+        </label>
       </div>
+
       <div className={styles.row}>
-        <input name="from_email" className={styles.input} placeholder="Email" type="email" required />
-        <input name="coop" className={styles.input} placeholder="Cooperative name" />
+        <label htmlFor="from_email" className={styles.label}>Email
+          <input id="from_email" name="from_email" className={styles.input} placeholder="Email" type="email" required aria-required="true" />
+        </label>
+
+        <label htmlFor="coop" className={styles.label}>Cooperative name
+          <input id="coop" name="coop" className={styles.input} placeholder="Cooperative name" />
+        </label>
       </div>
-       <div className={styles.row}>
-         <input name="phone" className={styles.input} placeholder="Phone (11 digits)" />
-         <input name="facebook" className={styles.input} placeholder="Facebook page or contact" />
-       </div>
-       <div>
-         <input type="hidden" name="schedule" value="May 22, 3:00pm-4:00pm" />
-       </div>
-       <div>
-         <textarea name="message" className={styles.textarea} placeholder="Tell us your challenge or message" />
-       </div>
-      <label className={styles.checkboxRow}>
-        <input type="checkbox" checked={subscribe} onChange={() => setSubscribe(!subscribe)} />
+
+      <div className={styles.row}>
+        <label htmlFor="phone" className={styles.label}>Phone
+          <input id="phone" name="phone" className={styles.input} placeholder="Phone (11 digits)" />
+        </label>
+
+        <label htmlFor="facebook" className={styles.label}>Facebook
+          <input id="facebook" name="facebook" className={styles.input} placeholder="Facebook page or contact" />
+        </label>
+      </div>
+
+      <input type="hidden" name="schedule" value="May 22, 3:00pm-4:00pm" />
+
+      <div>
+        <label htmlFor="message" className={styles.label}>Message
+          <textarea id="message" name="message" className={styles.textarea} placeholder="Tell us your challenge or message" />
+        </label>
+      </div>
+
+      <label className={styles.checkboxRow} htmlFor="subscribed">
+        <input id="subscribed" name="subscribed" type="checkbox" checked={subscribe} onChange={() => setSubscribe(!subscribe)} />
         I agree to receive updates and event announcements from CORA.
       </label>
+
       <div className={styles.actions}>
-        <button type="button" className={styles.cancel} onClick={()=>{(document.activeElement as HTMLElement)?.blur()}}>Cancel</button>
-        <button type="submit" disabled={loading} className={styles.btn}>{loading? 'Sending...' : 'Request Demo'}</button>
+        <button type="button" className={styles.cancel} onClick={handleCancel}>Cancel</button>
+        <button type="submit" disabled={loading} className={styles.btn}>{loading ? 'Sending...' : 'Register'}</button>
       </div>
-      {message && <p className={message.startsWith('Thanks') ? styles.success : styles.error}>{message}</p>}
+
+      {message && (
+        <p role="status" aria-live="polite" className={success ? styles.success : styles.error}>
+          {message}
+        </p>
+      )}
     </form>
   )
 }

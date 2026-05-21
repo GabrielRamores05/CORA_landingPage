@@ -26,8 +26,7 @@ export default function Hero({ onOpenBooking }: Props){
             </div>
             
             <button type="button" className={`${styles.heroCta} ${styles.heroCtaPulse}`} onClick={onOpenBooking}>
-              <span>Review Your Workflow With Us</span>
-              <span className={styles.ctaArrow}>→</span>
+              BOOK A DEMO NOW
             </button>
 
             <div className={styles.heroTrustLine}>

@@ -1,0 +1,226 @@
+.sidebarWrapper {
+  position: relative;
+  display: flex;
+  height: auto;
+}
+
+.sidebar {
+  width: 200px;
+  min-width: 200px;
+  min-height: 100vh;
+  height: auto;
+  padding: 20px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(180deg, #0f141a 0%, #0b1010 100%);
+  color: #fff;
+  position: relative;
+  transition: transform 250ms var(--ease-standard);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.menuGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.menuItem,
+.submenuItem {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.88);
+  border: none;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background 180ms var(--ease-standard), color 180ms var(--ease-standard);
+}
+
+.brandContainer {
+  margin-bottom: 40px;
+}
+
+.logoRow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
+.brandMark {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.brandText {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 230px;
+}
+
+.menuGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.menuItem,
+.submenuItem {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.92);
+  border: none;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background 180ms var(--ease-standard), color 180ms var(--ease-standard);
+}
+
+.menuItem:hover,
+.submenuItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.activeSub {
+  color: #ffd1a1;
+}
+
+.expandIcon {
+  font-size: 1.2rem;
+}
+
+.submenu {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 12px;
+  margin-top: 6px;
+}
+
+.submenuOpen {
+  display: flex;
+}
+
+.footerActions {
+  margin-top: 36px;
+}
+
+.ctaButton {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-orange-sm);
+}
+
+.footerNote {
+  margin-top: 20px;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mobileToggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(15, 20, 25, 0.92);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px;
+  z-index: 1500;
+  touch-action: manipulation;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+}
+
+.mobileToggle span {
+  width: 16px;
+  height: 2px;
+  background: #fff;
+  border-radius: 9999px;
+}
+
+.mobileToggle:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.92);
+  outline-offset: 2px;
+}
+
+.sidebarOpen {
+  transform: translateX(0);
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-width: auto;
+    z-index: 1000;
+    transform: translateX(100%);
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .mobileToggle {
+    display: flex;
+  }
+
+  .footerActions {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menuItem,
+  .submenuItem {
+    padding: 16px 18px;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobileToggle {
+    display: none !important;
+  }
+}
