@@ -176,15 +176,19 @@ export default function BookingForm({ onSuccess }: Props) {
         const emailjs = (window as CustomWindow).emailjs
         if (emailjs.init && userId) emailjs.init(userId)
         await emailjs.send(serviceId, templateId, templateParams)
-        setMessage('Congratulations! You are now registered for our May 22 demo. We\'ll send you the Google Meet link right away.')
+        setMessage('Congratulations! You are now registered for our May 29 demo. We\'ll send you the Google Meet link right away.')
         setSuccess(true)
         form.reset()
         setSubscribe(false)
         
         // Trigger confetti animation
         triggerConfetti()
-        
-        if (onSuccess) onSuccess()
+
+        // Delay closing the modal so the success message and confetti
+        // are visible to the user before the parent closes the dialog.
+        if (onSuccess) {
+          setTimeout(() => onSuccess(), 2200)
+        }
       } else {
         setMessage('Email service not initialized. Please check EmailJS setup.')
         setSuccess(false)
@@ -244,7 +248,7 @@ export default function BookingForm({ onSuccess }: Props) {
         </label>
       </div>
 
-      <input type="hidden" name="schedule" value="May 22, 3:00pm-4:00pm" />
+      <input type="hidden" name="schedule" value="May 29, 3:00pm-4:00pm" />
 
       <div>
         <label htmlFor="message" className={styles.label}>Message
