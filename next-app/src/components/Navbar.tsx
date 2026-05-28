@@ -22,6 +22,13 @@ export default function Navbar({ onOpenBooking }: Props) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const handleRegisterClick = () => {
+    const registrationForm = document.getElementById('registration-form')
+    if (registrationForm) {
+      registrationForm.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <div className={`${styles.navContainer} container`}>
@@ -38,17 +45,12 @@ export default function Navbar({ onOpenBooking }: Props) {
 
         {/* Desktop Links */}
         <div className={styles.desktopLinks}>
-          <a className={styles.link} href="#features">Features</a>
-          <a className={styles.link} href="#social-proof">Events</a>
-          <a className={styles.link} href="#onboarding">Support</a>
           <button 
             type="button" 
             className={styles.ctaButton} 
-            onClick={() => {
-              if (onOpenBooking) onOpenBooking()
-            }}
+            onClick={handleRegisterClick}
           >
-            Schedule a Demo
+            Register for May 29 Demo
           </button>
         </div>
 
@@ -57,7 +59,7 @@ export default function Navbar({ onOpenBooking }: Props) {
           type="button" 
           className={`${styles.hamburger} ${mobileMenuOpen ? styles.hamburgerActive : ''}`} 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle navigation menu"
+          aria-label="Toggle registration menu"
         >
           <span></span>
           <span></span>
@@ -67,18 +69,15 @@ export default function Navbar({ onOpenBooking }: Props) {
 
       {/* Mobile Links Dropdown */}
       <div className={`${styles.mobileDropdown} ${mobileMenuOpen ? styles.mobileDropdownActive : ''}`}>
-        <a className={styles.mobileLink} href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
-        <a className={styles.mobileLink} href="#social-proof" onClick={() => setMobileMenuOpen(false)}>Events</a>
-        <a className={styles.mobileLink} href="#onboarding" onClick={() => setMobileMenuOpen(false)}>Support</a>
         <button 
           type="button" 
           className={styles.mobileCta} 
           onClick={() => {
             setMobileMenuOpen(false)
-            if (onOpenBooking) onOpenBooking()
+            handleRegisterClick()
           }}
         >
-          Schedule a Demo
+          Register for May 29 Demo
         </button>
       </div>
     </nav>

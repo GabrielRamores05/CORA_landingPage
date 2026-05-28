@@ -124,6 +124,25 @@ export default function BookingForm({ onSuccess }: Props) {
     setMessage(null)
     setSuccess(null)
 
+    const requiredFields = [
+      'first_name',
+      'last_name',
+      'from_email',
+      'coop',
+      'phone',
+      'facebook',
+    ]
+
+    for (const fieldName of requiredFields) {
+      const field = form.querySelector<HTMLInputElement>(`[name="${fieldName}"]`)
+      if (!field || !field.value.trim()) {
+        setMessage('Please fill in all required fields before submitting.')
+        setSuccess(false)
+        setLoading(false)
+        return
+      }
+    }
+
     try {
       // Get reCAPTCHA token
       const recaptchaToken = await getRecaptchaToken()
@@ -177,10 +196,6 @@ export default function BookingForm({ onSuccess }: Props) {
         if (emailjs.init && userId) emailjs.init(userId)
         await emailjs.send(serviceId, templateId, templateParams)
         setMessage('Congratulations! You are now registered for our May 29 demo. We\'ll send you the Google Meet link right away.')
-        setSuccess(true)
-        form.reset()
-        setSubscribe(false)
-        
         // Trigger confetti animation
         triggerConfetti()
 
@@ -216,7 +231,7 @@ export default function BookingForm({ onSuccess }: Props) {
   }
 
   return (
-    <form ref={formRef} className={styles.form} onSubmit={handleSubmit} noValidate>
+    <form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
       <div id="dummy-recaptcha" style={{ display: 'none' }}></div>
       <div className={styles.row}>
         <label htmlFor="first_name" className={styles.label}>First name
@@ -234,17 +249,17 @@ export default function BookingForm({ onSuccess }: Props) {
         </label>
 
         <label htmlFor="coop" className={styles.label}>Cooperative name
-          <input id="coop" name="coop" className={styles.input} placeholder="Cooperative name" />
+          <input id="coop" name="coop" className={styles.input} placeholder="Cooperative name" required aria-required="true" />
         </label>
       </div>
 
       <div className={styles.row}>
         <label htmlFor="phone" className={styles.label}>Phone
-          <input id="phone" name="phone" className={styles.input} placeholder="Phone (11 digits)" />
+          <input id="phone" name="phone" className={styles.input} placeholder="Phone (11 digits)" required aria-required="true" />
         </label>
 
         <label htmlFor="facebook" className={styles.label}>Facebook
-          <input id="facebook" name="facebook" className={styles.input} placeholder="Facebook page or contact" />
+          <input id="facebook" name="facebook" className={styles.input} placeholder="Facebook page or contact" required aria-required="true" />
         </label>
       </div>
 
@@ -263,7 +278,7 @@ export default function BookingForm({ onSuccess }: Props) {
 
       <div className={styles.actions}>
         <button type="button" className={styles.cancel} onClick={handleCancel}>Cancel</button>
-        <button type="submit" disabled={loading} className={styles.btn}>{loading ? 'Sending...' : 'Register'}</button>
+        <button type="submit" disabled={loading} className={styles.btn}>{loading ? 'Registering...' : 'Register'}</button>
       </div>
 
       {message && (
