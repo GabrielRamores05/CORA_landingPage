@@ -6,10 +6,9 @@ type Props = {
   onOpenBooking: () => void
 }
 
-const demos = [
-  { src: '/images/April 30 Online Demo.jpg', label: 'April 30, 2026 Online Demo', alt: 'CORA online demo April 30, 2026' },
-  { src: '/images/Online-Demo-May-8.jpg', label: 'May 8, 2026 Online Demo', alt: 'CORA online demo May 8, 2026' },
-  { src: '/images/Online-Demo-May-15.jpg', label: 'May 15, 2026 Online Demo', alt: 'CORA online demo May 15, 2026' },
+const deployments = [
+  { src: '/images/Onboarding-LCCMPC.jpg', label: 'LCCMPC Deployment', alt: 'Edgepoint CORA onboarding at LCCMPC' },
+  { src: '/images/Onboarding_SEMCO1.jpg', label: 'SEMCO Onboarding', alt: 'Edgepoint CORA onboarding at SEMCO' },
 ]
 
 export default function DemoSection({ onOpenBooking }: Props){
@@ -18,19 +17,19 @@ export default function DemoSection({ onOpenBooking }: Props){
       <div className="container">
         <div className={styles.inner}>
           <div className={styles.content}>
-            <span className={styles.label}>Live Sessions</span>
-            <h2 className={styles.title}>Online Demos — See CORA Live</h2>
-            <p className={styles.subtitle}>We host interactive online demos to walkthrough features, compliance updates, and daily operational ease. Join the next one — online, anywhere in the Philippines.</p>
+            <span className={styles.label}>Proven in the Field</span>
+            <h2 className={styles.title}>Edgepoint Onboarding & Deployments</h2>
+            <p className={styles.subtitle}>CORA isn't just an idea—it's actively running in the real world. See how we hand-hold our cooperative partners during deployment to ensure zero downtime and absolute confidence.</p>
 
             <div className={styles.gallery}>
-              {demos.map((demo) => (
-                <div key={demo.label} className={styles.galleryItem}>
+              {deployments.map((dep) => (
+                <div key={dep.label} className={styles.galleryItem}>
                   <div className={styles.imageWrapper}>
-                    <Image src={demo.src} alt={demo.alt} fill className={styles.image} sizes="(max-width: 768px) 100vw, 33vw" />
+                    <Image src={dep.src} alt={dep.alt} fill className={styles.image} sizes="(max-width: 768px) 100vw, 50vw" />
                   </div>
                   <div className={styles.galleryCaption}>
                     <span className={styles.dot}></span>
-                    <span className={styles.galleryLabel}>{demo.label}</span>
+                    <span className={styles.galleryLabel}>{dep.label}</span>
                   </div>
                 </div>
               ))}

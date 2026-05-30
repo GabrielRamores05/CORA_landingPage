@@ -26,13 +26,13 @@
   font-size: clamp(28px, 3.5vw, 38px);
   font-weight: 800;
   line-height: 1.15;
-  color: var(--dark);
+  color: var(--text-main);
   margin: 0 0 16px;
   letter-spacing: -0.02em;
 }
 
 .description {
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-size: var(--text-base);
   line-height: 1.8;
 }
@@ -97,11 +97,11 @@
 
 .browserUrlBar {
   flex: 1;
-  background-color: var(--gray-50);
+  background-color: var(--text-muted);
   border: 1.5px solid var(--gray-200);
   border-radius: var(--radius-sm);
   font-size: 11px;
-  color: var(--gray-500);
+  color: var(--text-muted);
   padding: 3px 12px;
   font-family: var(--font-body);
   text-align: center;
@@ -142,12 +142,12 @@
   font-family: var(--font-heading);
   font-size: 18px;
   font-weight: 700;
-  color: var(--dark);
+  color: var(--text-main);
   margin: 0;
 }
 
 .caption p {
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-size: 14px;
   line-height: 1.6;
   margin: 0;

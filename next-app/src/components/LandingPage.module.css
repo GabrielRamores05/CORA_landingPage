@@ -4,7 +4,7 @@
   min-height: 100vh;
   height: auto;
   width: 100%;
-  background: linear-gradient(180deg, #FFFBF8 0%, #FFFFFF 100%);
+  background: transparent;
   overflow-x: hidden;
   overflow-y: visible;
 }
@@ -92,8 +92,8 @@
   padding: 14px 18px;
   border-radius: 16px;
   border: 1px solid rgba(15, 20, 25, 0.08);
-  background: #fff;
-  color: var(--dark);
+  background: var(--emerald-950); border: 1px solid var(--emerald-800);
+  color: var(--text-main);
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.9rem;
@@ -214,7 +214,7 @@
 }
 
 .featureBullet {
-  color: var(--gray-700);
+  color: var(--text-muted);
   font-size: 0.98rem;
 }
 
@@ -223,7 +223,7 @@
   width: min(100%, 360px);
   border-radius: 20px;
   overflow: visible;
-  background: #fff;
+  background: var(--emerald-950); border: 1px solid var(--emerald-800);
   padding: 14px;
   box-shadow: var(--shadow-lg);
 }
@@ -243,7 +243,7 @@
 .quote {
   margin-top: 12px;
   font-style: italic;
-  color: var(--gray-600);
+  color: var(--text-muted);
 }
 
 .heroImageWrapper {
@@ -318,7 +318,7 @@
   min-height: 180px;
   border-radius: 22px;
   overflow: hidden;
-  background: #fff;
+  background: var(--emerald-950); border: 1px solid var(--emerald-800);
   box-shadow: var(--shadow-xs);
 }
 
@@ -334,8 +334,8 @@
   padding: 14px 18px;
   border-radius: 16px;
   border: 1px solid rgba(15, 20, 25, 0.08);
-  background: #fff;
-  color: var(--dark);
+  background: var(--emerald-950); border: 1px solid var(--emerald-800);
+  color: var(--text-main);
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.9rem;
@@ -379,12 +379,12 @@
   max-width: 760px;
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--gray-700);
+  color: var(--text-muted);
 }
 
 .lead {
   font-size: 1.08rem;
-  color: var(--gray-800);
+  color: var(--text-muted);
   line-height: 1.5;
   margin-bottom: 6px;
 }
@@ -447,7 +447,7 @@
 }
 
 .sectionText {
-  color: var(--gray-700);
+  color: var(--text-muted);
   line-height: 1.8;
 }
 
@@ -468,7 +468,7 @@
 }
 
 .contactItem strong {
-  color: var(--dark);
+  color: var(--text-main);
 }
 
 .contactItemWide {

@@ -5,12 +5,12 @@
 
 :root {
   /* Brand Colors */
-  --orange: #E07C3A;
-  --orange-hover: #C96A2E;
+  --orange: #f97316;
+  --orange-hover: #ea580c;
   --orange-light: #FF9F43;
-  --orange-50: rgba(224, 124, 58, 0.06);
-  --orange-100: rgba(224, 124, 58, 0.10);
-  --orange-200: rgba(224, 124, 58, 0.16);
+  --orange-50: rgba(249, 115, 22, 0.06);
+  --orange-100: rgba(249, 115, 22, 0.10);
+  --orange-200: rgba(249, 115, 22, 0.16);
 
   /* Neutrals */
   --dark: #0F1419;
@@ -56,8 +56,8 @@
   --shadow-xl: 0 20px 25px -5px rgba(15, 20, 25, 0.06), 0 8px 10px -6px rgba(15, 20, 25, 0.04);
   --shadow-card: 0 1px 3px rgba(15, 20, 25, 0.04), 0 0 0 1px rgba(15, 20, 25, 0.03);
   --shadow-card-hover: 0 8px 24px rgba(15, 20, 25, 0.08), 0 0 0 1px rgba(15, 20, 25, 0.04);
-  --shadow-orange-sm: 0 4px 14px rgba(224, 124, 58, 0.20);
-  --shadow-orange-lg: 0 8px 24px rgba(224, 124, 58, 0.25);
+  --shadow-orange-sm: 0 4px 14px rgba(249, 115, 22, 0.20);
+  --shadow-orange-lg: 0 8px 24px rgba(249, 115, 22, 0.25);
 
   /* Border Radius */
   --radius-sm: 6px;
@@ -103,8 +103,8 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: 1.6;
-  color: var(--dark);
-  background: var(--white);
+  color: #f8fafc;
+  background: #020617;
   overflow-x: hidden;
 }
 
@@ -130,7 +130,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: var(--dark);
+  color: #f8fafc;
 }
 
 /* === Global Keyframes === */

@@ -9,13 +9,22 @@ type Props = {
 
 export default function BookingModal({ open, onClose }: Props) {
   if (!open) return null
+
+  const handleSuccess = () => {
+    // Track Meta Pixel Lead event
+    if (typeof window !== 'undefined' && (window as any).coraTrackLead) {
+      (window as any).coraTrackLead()
+    }
+    onClose()
+  }
+
   return (
     <Modal onClose={onClose}>
-      <h3 className={styles.heading}>Schedule a Free Consultation &amp; Demo</h3>
+      <h3 className={styles.heading}>Book Your Free Demo Review</h3>
       <p className={styles.subheading}>
-        Let&apos;s talk about your cooperative&apos;s challenges, CISA/CAIS compliance needs, and how our team can help migrate your records.
+        No credit card required • Free Google Meet demonstration
       </p>
-      <BookingForm onSuccess={onClose} />
+      <BookingForm onSuccess={handleSuccess} />
     </Modal>
   )
 }

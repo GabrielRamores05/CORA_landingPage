@@ -10,7 +10,7 @@
 }
 
 .featuresLabel {
-  color: var(--orange);
+  color: #1B4D3E;
   font-family: var(--font-heading);
   font-size: var(--text-xs);
   letter-spacing: 0.18em;
@@ -26,12 +26,12 @@
   font-weight: 800;
   line-height: 1.15;
   margin: 0 0 16px;
-  color: var(--dark);
+  color: var(--text-main);
   letter-spacing: -0.02em;
 }
 
 .featuresSubtitle {
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-size: var(--text-base);
   line-height: 1.8;
 }
@@ -48,7 +48,7 @@
   background: var(--white);
   border-radius: var(--radius-lg);
   padding: 28px;
-  border: 1px solid rgba(224, 124, 58, 0.1);
+  border: 1.5px solid rgba(27, 77, 62, 0.15);
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
@@ -58,7 +58,7 @@
 
 .bentoCard:hover {
   transform: translateY(-4px);
-  border-color: rgba(224, 124, 58, 0.25);
+  border-color: rgba(27, 77, 62, 0.4);
   box-shadow: var(--shadow-card-hover);
 }
 
@@ -69,13 +69,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(224, 124, 58, 0.08);
-  color: var(--orange);
+  background: rgba(27, 77, 62, 0.12);
+  color: #1B4D3E;
   transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .bentoCard:hover .bentoIcon {
-  background: rgba(224, 124, 58, 0.14);
+  background: rgba(27, 77, 62, 0.18);
   transform: scale(1.05);
 }
 
@@ -84,12 +84,12 @@
   font-size: var(--text-lg);
   font-weight: 700;
   margin: 0;
-  color: var(--dark);
+  color: var(--text-main);
 }
 
 .bentoDesc {
   font-size: 14px;
-  color: var(--gray-600);
+  color: var(--text-muted);
   line-height: 1.7;
   margin: 0;
 }
@@ -111,4 +111,18 @@
   .bentoCard {
     padding: 24px;
   }
+}
+
+.bentoImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bentoImage {
+  object-fit: cover;
 }

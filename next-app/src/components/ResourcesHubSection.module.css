@@ -30,13 +30,13 @@
   font-size: clamp(28px, 3.5vw, 38px);
   font-weight: 800;
   line-height: 1.15;
-  color: var(--dark);
+  color: var(--text-main);
   margin: 0 0 16px;
   letter-spacing: -0.02em;
 }
 
 .description {
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-size: var(--text-base);
   line-height: 1.8;
 }
@@ -96,13 +96,13 @@
   font-family: var(--font-heading);
   font-size: 17px;
   font-weight: 700;
-  color: var(--dark);
+  color: var(--text-main);
   margin: 0;
   line-height: 1.3;
 }
 
 .cardContent p {
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-size: 14px;
   line-height: 1.6;
   margin: 0;

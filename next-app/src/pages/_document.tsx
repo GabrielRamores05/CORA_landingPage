@@ -35,6 +35,15 @@ class MyDocument extends Document {
           {/* Meta Pixel (preserved) */}
           <script dangerouslySetInnerHTML={{ __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '2132083164253304');fbq('track', 'PageView');` }} />
 
+          {/* Meta Pixel Lead event - will be triggered on form success */}
+          <script dangerouslySetInnerHTML={{ __html: `
+            window.coraTrackLead = function() {
+              if (window.fbq) {
+                fbq('track', 'Lead');
+              }
+            };
+          ` }} />
+
           {/* HubSpot Embed (preserved) */}
           <script id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246084261.js"></script>
 

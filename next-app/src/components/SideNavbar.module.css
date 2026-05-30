@@ -170,7 +170,7 @@
 .mobileToggle span {
   width: 16px;
   height: 2px;
-  background: #fff;
+  background: var(--emerald-950); border: 1px solid var(--emerald-800);
   border-radius: 9999px;
 }
 

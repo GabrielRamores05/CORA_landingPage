@@ -10,15 +10,14 @@ export default function Hero({ onOpenBooking }: Props){
     <section className={styles.hero} id="hero">
       <div className={`${styles.heroWrapper} container`}>
         <div className={styles.heroGrid}>
-          {/* Left Column: Content */}
           <div className={styles.heroLeft}>
-            <span className={styles.heroCategoryTag}>⏰ LIMITED TIME EVENT</span>
+            <span className={styles.heroCategoryTag}>TOMORROW: LIVE CO-OP DEMO</span>
             <h1 className={styles.heroTitle}>
-              Exclusive Live Demo:<br />
-              <span className={styles.highlight}>Automating Your Co-op's CISA & CAIS Compliance</span>
+              Balance your books by 5:00 PM<br />
+              <span className={styles.highlight}>without manual cross-checking.</span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Happening Tomorrow: Friday, May 29 | Stop losing sleep over manual ledgers and failed audits. Join our live, step-by-step system walkthrough tomorrow and see how CORA eliminates Excel errors and automates your mandatory reports in minutes.
+              Friday, May 29. See how CORA's real-time teller-to-ledger sync and 3-click CISA/CAIS exports eliminate Excel chaos. Stop stressing over CDA compliance penalties. Watch the exact process your co-op can use.
             </p>
 
             <CountdownTimer />
@@ -28,9 +27,9 @@ export default function Hero({ onOpenBooking }: Props){
             </button>
 
             <div className={styles.heroTrustLine}>
-              <span>✓ See live CISA & CAIS report generation</span>
-              <span>✓ Watch real Excel data migration in action</span>
-              <span>✓ Get your registration confirmation instantly</span>
+              <span>✓ Live walk-through of day-book balancing</span>
+              <span>✓ See how reports get ready without extra Excel work</span>
+              <span>✓ Receive the Google Meet link immediately</span>
             </div>
           </div>
         </div>

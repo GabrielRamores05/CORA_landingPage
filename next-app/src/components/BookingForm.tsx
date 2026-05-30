@@ -1,12 +1,32 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styles from './BookingForm.module.css'
 
 type Props = { onSuccess?: () => void }
-type CustomWindow = typeof window & { 
-  grecaptcha?: any
-  emailjs?: any
-  grecaptchaWidgetId?: number
-}
+type FormElements = HTMLInputElement | HTMLSelectElement
+
+const COOP_TYPES = [
+  'Credit',
+  'Consumer',
+  'Producer',
+  'Marketing',
+  'Service',
+  'Multipurpose',
+  'Agrarian Reform',
+  'Bank',
+  'Dairy',
+  'Electric',
+  'Fishermen',
+  'Housing',
+  'Transport',
+  'Water Service',
+]
+
+const ROLES = [
+  'Board Chairman',
+  'General Manager',
+  'Accountant/Treasurer',
+  'Other Officer',
+]
 
 export default function BookingForm({ onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
@@ -15,107 +35,15 @@ export default function BookingForm({ onSuccess }: Props) {
   const [subscribe, setSubscribe] = useState(false)
   const formRef = useRef<HTMLFormElement | null>(null)
 
-  function triggerConfetti(): void {
-    const win = typeof window !== 'undefined' ? (window as CustomWindow & { confetti?: any }) : null
-    if (win?.confetti) {
-      try {
-        win.confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          duration: 3000,
-        })
-      } catch (err) {
-        console.error('Confetti error:', err)
-      }
-    }
-  }
-
-  function getRecaptchaToken(): Promise<string | null> {
-    return new Promise((resolve) => {
-      // Skip reCAPTCHA in development (localhost)
-      const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-      if (isDev) {
-        console.log('Development mode: reCAPTCHA skipped')
-        resolve('dev-token-' + Date.now())
-        return
-      }
-
-      const win = typeof window !== 'undefined' ? (window as CustomWindow) : null
-      if (!win?.grecaptcha) {
-        // Wait for grecaptcha to load
-        let attempts = 0
-        const checkInterval = setInterval(() => {
-          attempts++
-          if ((window as CustomWindow).grecaptcha) {
-            clearInterval(checkInterval)
-            executeRecaptcha(resolve)
-          } else if (attempts > 50) {
-            // Timeout after 5 seconds
-            clearInterval(checkInterval)
-            console.error('reCAPTCHA script failed to load')
-            resolve(null)
-          }
-        }, 100)
-        return
-      }
-      executeRecaptcha(resolve)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const utmFields = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content']
+    utmFields.forEach(field => {
+      const value = urlParams.get(field) || ''
+      const input = formRef.current?.querySelector(`input[name="${field}"]`) as HTMLInputElement
+      if (input) input.value = value
     })
-  }
-
-  function executeRecaptcha(resolve: (token: string | null) => void): void {
-    try {
-      const win = window as CustomWindow
-      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LfHDvYsAAAAAMkthB95TDFTan-ZUi9Jq7ltJdeI'
-      
-      console.log('grecaptcha available:', !!win.grecaptcha)
-      console.log('siteKey:', siteKey)
-      
-      if (win.grecaptcha && typeof win.grecaptcha.ready === 'function') {
-        win.grecaptcha.ready(() => {
-          console.log('grecaptcha.ready callback executed')
-          // Render invisible reCAPTCHA if not already rendered
-          if (win.grecaptchaWidgetId === undefined) {
-            console.log('Rendering reCAPTCHA widget...')
-            try {
-              const widgetId = win.grecaptcha.render('dummy-recaptcha', {
-                sitekey: siteKey,
-                size: 'invisible',
-                badge: 'inline',
-                callback: (token: string) => {
-                  console.log('reCAPTCHA token received')
-                  resolve(token)
-                },
-                'expired-callback': () => {
-                  console.error('reCAPTCHA expired')
-                  resolve(null)
-                },
-                'error-callback': () => {
-                  console.error('reCAPTCHA error')
-                  resolve(null)
-                }
-              })
-              console.log('Widget ID returned:', widgetId)
-              win.grecaptchaWidgetId = widgetId
-            } catch (renderErr) {
-              console.error('reCAPTCHA render error:', renderErr)
-              resolve(null)
-              return
-            }
-          }
-          // Execute the widget
-          console.log('Executing reCAPTCHA with widgetId:', win.grecaptchaWidgetId)
-          win.grecaptcha.execute(win.grecaptchaWidgetId)
-        })
-      } else {
-        console.error('grecaptcha.ready not available')
-        resolve(null)
-      }
-    } catch (err) {
-      console.error('reCAPTCHA execute exception:', err)
-      resolve(null)
-    }
-  }
+  }, [])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -129,12 +57,13 @@ export default function BookingForm({ onSuccess }: Props) {
       'last_name',
       'from_email',
       'coop',
-      'phone',
-      'facebook',
+      'coop_type',
+      'role',
+      'mobile',
     ]
 
     for (const fieldName of requiredFields) {
-      const field = form.querySelector<HTMLInputElement>(`[name="${fieldName}"]`)
+      const field = form.querySelector(`[name="${fieldName}"]`) as FormElements | null
       if (!field || !field.value.trim()) {
         setMessage('Please fill in all required fields before submitting.')
         setSuccess(false)
@@ -144,63 +73,25 @@ export default function BookingForm({ onSuccess }: Props) {
     }
 
     try {
-      // Get reCAPTCHA token
-      const recaptchaToken = await getRecaptchaToken()
-      if (!recaptchaToken) {
-        setMessage('reCAPTCHA verification failed. Please try again.')
-        setSuccess(false)
-        setLoading(false)
-        return
-      }
-
-      // Get email from form for rate limiting check
-      const emailInput = form.querySelector('input[name="from_email"]') as HTMLInputElement
-      const email = emailInput?.value || ''
-
-      if (!email) {
-        setMessage('Email is required.')
-        setSuccess(false)
-        setLoading(false)
-        return
-      }
-
-      // Verify token with backend (includes rate limit check)
-      const verifyResponse = await fetch('/api/verify-recaptcha', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: recaptchaToken, email }),
-      })
-
-      const verifyData = await verifyResponse.json()
-      console.log('Verification response:', verifyData, 'Status:', verifyResponse.status)
-      if (!verifyData.success) {
-        setMessage(verifyData.message || 'Verification failed. Please try again.')
-        setSuccess(false)
-        setLoading(false)
-        return
-      }
-
-      // Proceed with form submission
       const formData = new FormData(form)
       const templateParams: Record<string, any> = {}
       formData.forEach((v, k) => (templateParams[k] = v))
-      templateParams.subscribed = subscribe
-        ? 'User has subscribed to receive newsletters and updates.'
-        : 'User did not subscribe to receive newsletters.'
+      templateParams.subscribed = subscribe ? 'Yes' : 'No'
 
       const serviceId = 'service_aay4edu'
       const templateId = 'template_os99snq'
       const userId = 'wU74bNn0Kht8Sa4J4'
-      if (typeof window !== 'undefined' && (window as CustomWindow).emailjs) {
-        const emailjs = (window as CustomWindow).emailjs
+
+      if (typeof window !== 'undefined' && (window as any).emailjs) {
+        const emailjs = (window as any).emailjs
         if (emailjs.init && userId) emailjs.init(userId)
         await emailjs.send(serviceId, templateId, templateParams)
-        setMessage('Congratulations! You are now registered for our May 29 demo. We\'ll send you the Google Meet link right away.')
-        // Trigger confetti animation
-        triggerConfetti()
+        setMessage('Registration successful! Check your email for the Google Meet link.')
+        setSuccess(true)
+        if ((window as any).coraTrackLead) {
+          (window as any).coraTrackLead()
+        }
 
-        // Delay closing the modal so the success message and confetti
-        // are visible to the user before the parent closes the dialog.
         if (onSuccess) {
           setTimeout(() => onSuccess(), 2200)
         }
@@ -222,7 +113,6 @@ export default function BookingForm({ onSuccess }: Props) {
     setSubscribe(false)
     setMessage(null)
     setSuccess(null)
-    // blur active element to dismiss virtual keyboards on mobile
     try {
       (document.activeElement as HTMLElement | null)?.blur()
     } catch {
@@ -232,7 +122,6 @@ export default function BookingForm({ onSuccess }: Props) {
 
   return (
     <form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
-      <div id="dummy-recaptcha" style={{ display: 'none' }}></div>
       <div className={styles.row}>
         <label htmlFor="first_name" className={styles.label}>First name
           <input id="first_name" name="first_name" className={styles.input} placeholder="First name" required aria-required="true" />
@@ -245,7 +134,7 @@ export default function BookingForm({ onSuccess }: Props) {
 
       <div className={styles.row}>
         <label htmlFor="from_email" className={styles.label}>Email
-          <input id="from_email" name="from_email" className={styles.input} placeholder="Email" type="email" required aria-required="true" />
+          <input id="from_email" name="from_email" className={styles.input} placeholder="Email (gmail, yahoo accepted)" type="email" required aria-required="true" />
         </label>
 
         <label htmlFor="coop" className={styles.label}>Cooperative name
@@ -254,22 +143,45 @@ export default function BookingForm({ onSuccess }: Props) {
       </div>
 
       <div className={styles.row}>
-        <label htmlFor="phone" className={styles.label}>Phone
-          <input id="phone" name="phone" className={styles.input} placeholder="Phone (11 digits)" required aria-required="true" />
+        <label htmlFor="coop_type" className={styles.label}>Cooperative type
+          <select id="coop_type" name="coop_type" className={styles.select} required aria-required="true">
+            <option value="">Select type</option>
+            {COOP_TYPES.map(type => (
+              <option key={type} value={type}>{type} Cooperative</option>
+            ))}
+          </select>
         </label>
 
-        <label htmlFor="facebook" className={styles.label}>Facebook
-          <input id="facebook" name="facebook" className={styles.input} placeholder="Facebook page or contact" required aria-required="true" />
+        <label htmlFor="role" className={styles.label}>Your role
+          <select id="role" name="role" className={styles.select} required aria-required="true">
+            <option value="">Select role</option>
+            {ROLES.map(role => (
+              <option key={role} value={role}>{role}</option>
+            ))}
+          </select>
         </label>
       </div>
 
-      <input type="hidden" name="schedule" value="May 29, 3:00pm-4:00pm" />
+      <div className={styles.row}>
+        <label htmlFor="mobile" className={styles.label}>Mobile
+          <input id="mobile" name="mobile" className={styles.input} placeholder="09xx xxx xxxx" required aria-required="true" />
+        </label>
+
+        <label htmlFor="schedule" className={styles.label}>Demo Date
+          <input id="schedule" name="schedule" className={styles.input} value="June 5, 2026" readOnly aria-readonly="true" />
+        </label>
+      </div>
 
       <div>
-        <label htmlFor="message" className={styles.label}>Message
-          <textarea id="message" name="message" className={styles.textarea} placeholder="Tell us your challenge or message" />
+        <label htmlFor="facebook" className={styles.label}>Facebook (optional)
+          <input id="facebook" name="facebook" className={styles.input} placeholder="Facebook page (optional)" />
         </label>
       </div>
+
+      <input type="hidden" name="utm_source" />
+      <input type="hidden" name="utm_medium" />
+      <input type="hidden" name="utm_campaign" />
+      <input type="hidden" name="utm_content" />
 
       <label className={styles.checkboxRow} htmlFor="subscribed">
         <input id="subscribed" name="subscribed" type="checkbox" checked={subscribe} onChange={() => setSubscribe(!subscribe)} />
@@ -278,7 +190,7 @@ export default function BookingForm({ onSuccess }: Props) {
 
       <div className={styles.actions}>
         <button type="button" className={styles.cancel} onClick={handleCancel}>Cancel</button>
-        <button type="submit" disabled={loading} className={styles.btn}>{loading ? 'Registering...' : 'Register'}</button>
+        <button type="submit" disabled={loading} className={styles.btn}>{loading ? 'Registering...' : 'Book My Free Demo Review'}</button>
       </div>
 
       {message && (

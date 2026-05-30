@@ -28,13 +28,13 @@
   font-size: clamp(28px, 3.5vw, 38px);
   font-weight: 800;
   line-height: 1.15;
-  color: var(--dark);
+  color: var(--text-main);
   margin: 0 0 16px;
   letter-spacing: -0.02em;
 }
 
 .description {
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-size: var(--text-base);
   line-height: 1.8;
 }
@@ -93,7 +93,7 @@
 }
 
 .oldBlock span {
-  color: var(--gray-600);
+  color: var(--text-muted);
   background: rgba(90, 102, 116, 0.08);
 }
 
@@ -106,7 +106,7 @@
   margin: 0;
   font-family: var(--font-heading);
   font-size: 17px;
-  color: var(--gray-700);
+  color: var(--text-muted);
   font-weight: 600;
   line-height: 1.4;
 }
@@ -115,7 +115,7 @@
   margin: 0;
   font-family: var(--font-heading);
   font-size: 18px;
-  color: var(--dark);
+  color: var(--text-main);
   font-weight: 700;
   line-height: 1.4;
 }

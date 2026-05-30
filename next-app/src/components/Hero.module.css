@@ -6,7 +6,7 @@
   justify-content: center;
   width: 100%;
   position: relative;
-  background: linear-gradient(135deg, #FFFBF8 0%, #FFF7F0 50%, #FFFAF5 100%);
+  background: transparent;
   overflow: hidden;
 }
 
@@ -46,7 +46,7 @@
 
 .heroGrid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr;
   gap: 64px;
   align-items: center;
   width: 100%;
@@ -78,7 +78,7 @@
   font-family: var(--font-heading);
   font-size: clamp(36px, 5vw, 54px);
   font-weight: 800;
-  color: var(--dark);
+  color: var(--text-main);
   line-height: 1.2;
   margin: 0;
   letter-spacing: -0.02em;
@@ -96,7 +96,7 @@
 
 .heroSubtitle {
   font-size: clamp(15px, 1.8vw, 17px);
-  color: var(--gray-600);
+  color: var(--text-muted);
   line-height: 1.7;
   margin: 0;
   font-weight: 500;
@@ -183,7 +183,7 @@
   flex-direction: column;
   gap: 8px;
   font-size: 13px;
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -267,7 +267,7 @@
 
 .founderQuote {
   font-size: 14px;
-  color: var(--gray-700);
+  color: var(--text-muted);
   line-height: 1.6;
   margin: 0;
   font-weight: 500;

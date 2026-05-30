@@ -1,10 +1,6 @@
 import styles from './Footer.module.css'
 
-type Props = {
-  onOpenBooking?: () => void
-}
-
-export default function Footer({ onOpenBooking }: Props){
+export default function Footer(){
   const handleRegisterClick = () => {
     const registrationForm = document.getElementById('registration-form')
     if (registrationForm) {
@@ -16,7 +12,7 @@ export default function Footer({ onOpenBooking }: Props){
     <footer className={styles.footer}>
       <div className={`${styles.inner} container`}>
         <div className={styles.urgentMessage}>
-          <p className={styles.urgentText}>⏰ Registration closes tonight. Don't let your cooperative fall behind using manual spreadsheets.</p>
+          <p className={styles.urgentText}>⏰ Registration closes tonight. Reserve your spot for the May 29 live demo.</p>
           <button 
             type="button" 
             className={styles.urgentButton}
@@ -31,7 +27,7 @@ export default function Footer({ onOpenBooking }: Props){
         <div className={styles.grid}>
           <div className={styles.brandCol}>
             <div className={styles.brand}>CORA</div>
-            <p className={styles.subtitle}>Cooperative Operations &amp; Records Application</p>
+            <p className={styles.subtitle}>Built for rural cooperatives to finish day books and audit reports with less risk.</p>
             <p className={styles.company}>By Edgepoint Solutions, Inc.</p>
           </div>
 

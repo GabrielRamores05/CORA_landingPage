@@ -6,13 +6,13 @@ export default function CountdownTimer() {
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      // Event is May 29, 2026, at 3:00 PM (15:00)
-      const eventDate = new Date(2026, 4, 29, 15, 0, 0).getTime()
+      // Target: May 29, 2026, 15:00:00 PHT (UTC+8)
+      const eventDate = new Date("2026-05-29T15:00:00+08:00").getTime()
       const now = new Date().getTime()
       const difference = eventDate - now
 
       if (difference > 0) {
-        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
+        const hours = Math.floor(difference / (1000 * 60 * 60))
         const minutes = Math.floor((difference / 1000 / 60) % 60)
         const seconds = Math.floor((difference / 1000) % 60)
         setTimeLeft(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)

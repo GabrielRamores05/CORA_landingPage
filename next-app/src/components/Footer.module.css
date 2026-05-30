@@ -1,6 +1,6 @@
 .footer {
   background: #0f141a;
-  color: var(--gray-400);
+  color: var(--text-muted);
   padding: 5px 6px 2px;
   font-size: 12px;
   line-height: 1.2;
@@ -33,7 +33,7 @@
 }
 
 .urgentButton {
-  background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange) 100%);
   color: var(--white);
   font-weight: 700;
   font-size: 14px;
@@ -86,14 +86,14 @@
 }
 
 .tagline {
-  color: var(--gray-400);
+  color: var(--text-muted);
   margin-bottom: 2px;
   max-width: 260px;
 }
 
 .company {
   font-size: 11px;
-  color: var(--gray-500);
+  color: var(--text-muted);
   margin-bottom: 0;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .linksList a {
-  color: var(--gray-400);
+  color: var(--text-muted);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
   display: inline-block;
@@ -148,7 +148,7 @@
 }
 
 .contactText {
-  color: var(--gray-300);
+  color: var(--text-muted);
   margin: 0 0 4px;
   max-width: 100%;
 }
@@ -180,7 +180,7 @@
 }
 
 .socialText {
-  color: var(--gray-300);
+  color: var(--text-muted);
   font-size: 12px;
 }
 
@@ -234,7 +234,7 @@
 }
 
 .addressText {
-  color: var(--gray-400);
+  color: var(--text-muted);
   margin: 0;
   line-height: 1.25;
 }
@@ -245,7 +245,7 @@
   padding-top: 4px;
   text-align: center;
   font-size: 11px;
-  color: var(--gray-500);
+  color: var(--text-muted);
 }
 
 /* Responsive Styles */
