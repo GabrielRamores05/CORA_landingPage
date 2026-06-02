@@ -265,6 +265,7 @@
 @media (max-width: 768px) {
   .downloadLink {
     font-size: 13px;
+    margin-bottom: 12px;
   }
 
   .downloadLink a {
@@ -276,6 +277,7 @@
   .downloadLink {
     font-size: 12px;
     margin-top: 16px;
+    margin-bottom: 12px;
     width: 100%;
     position: relative;
     z-index: 10;
