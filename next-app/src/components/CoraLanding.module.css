@@ -131,19 +131,6 @@
     margin-top: 60px;
     border: none !important;
     border-top: none !important;
-    padding-top: 20px;
-    padding-bottom: 40px;
-    overflow: hidden;
-  }
-
-  .heroImageContainer {
-    overflow: hidden;
-  }
-}
-
-@media (max-width: 480px) {
-  .heroGrid {
-    gap: 0 !important;
   }
 }
 
@@ -151,9 +138,8 @@
 .hero {
   padding: 120px 0 80px;
   background: #ffffff;
-  border-bottom: none !important;
+  border-bottom: none;
   margin-top: 80px;
-  overflow: hidden;
 }
 
 .heroGrid {
@@ -488,8 +474,6 @@
 /* Hero Image */
 .heroImageContainer {
   position: relative;
-  overflow: hidden;
-  width: 100%;
 }
 
 .heroImage {
