@@ -134,12 +134,12 @@ export default function CoraLanding() {
               </p>
             </div>
 
-            <button className={s.heroCta} onClick={open}>
-              Request a Free System Demonstration
-            </button>
             <p className={s.downloadLink}>
               <a href="/PDF/CORA-Overview.pdf" target="_blank" rel="noopener noreferrer">Download our Presentation Kit for Your Next Board Meeting (PDF)</a>
             </p>
+            <button className={s.heroCta} onClick={open}>
+              Request a Free System Demonstration
+            </button>
           </div>
 
           <div className={s.heroImageContainer}>

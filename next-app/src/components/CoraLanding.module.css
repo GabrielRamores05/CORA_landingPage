@@ -246,17 +246,52 @@
 
 /* Download link */
 .downloadLink {
-  margin-top: 12px;
+  margin-top: 32px;
+  margin-bottom: 16px;
   font-size: 14px;
 }
 
 .downloadLink a {
   color: #f97316;
   text-decoration: none;
+  display: inline-block;
+  padding: 8px 4px;
 }
 
 .downloadLink a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .downloadLink {
+    font-size: 13px;
+  }
+
+  .downloadLink a {
+    padding: 12px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .downloadLink {
+    font-size: 12px;
+    margin-top: 16px;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  .downloadLink a {
+    display: block;
+    padding: 16px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 1.4;
+    pointer-events: auto;
+    cursor: pointer;
+  }
 }
 
 /* Setup Box */
@@ -435,6 +470,12 @@
   display: block;
   transform: scale(1.4);
   transform-origin: center;
+}
+
+@media (max-width: 480px) {
+  .heroImage {
+    transform: scale(1);
+  }
 }
 
 .heroImageCaption {
