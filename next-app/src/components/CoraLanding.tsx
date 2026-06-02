@@ -109,7 +109,7 @@ export default function CoraLanding() {
 
       <nav className={s.nav}>
         <div className={`${s.container} ${s.navInner}`}>
-          <Image src="/images/CORAlogo.png" alt="CORA" width={110} height={32} priority className={s.navLogo} />
+          <Image src="/images/CORAlogo.png" alt="CORA" width={160} height={48} priority className={s.navLogo} />
           <button className={s.navCta} onClick={open}>Book Free Demo</button>
         </div>
       </nav>
@@ -120,7 +120,7 @@ export default function CoraLanding() {
             <div className={s.badge}>MODERN, CDA-COMPLIANT SYSTEM</div>
 
             <h1 className={s.headline}>
-              Shift from Stressful Excel Files to Automated, Audit-Ready Cooperative Records
+            Stress-Free Cooperative Records
             </h1>
 
             <p className={s.subheadline}>
@@ -138,7 +138,7 @@ export default function CoraLanding() {
               Request a Free System Demonstration
             </button>
             <p className={s.downloadLink}>
-              <a href="/PDF/CORA-Overview.pdf" target="_blank" rel="noopener noreferrer">Download our 1-Page Presentation Kit for Your Next Board Meeting (PDF)</a>
+              <a href="/PDF/CORA-Overview.pdf" target="_blank" rel="noopener noreferrer">Download our Presentation Kit for Your Next Board Meeting (PDF)</a>
             </p>
           </div>
 
@@ -205,7 +205,7 @@ export default function CoraLanding() {
             <div className={s.stepDivider}></div>
             <div className={s.stepItem}>
               <span className={s.stepNum}>3</span>
-              <p>Join the June 5, 2026 Google Meet demo</p>
+              <p>Join the june 3, 2026 Google Meet demo</p>
             </div>
           </div>
         </div>
@@ -296,7 +296,7 @@ export default function CoraLanding() {
             <button className={s.modalClose} onClick={close} aria-label="Close">✕</button>
 
             <h3 className={s.modalTitle}>Book Your Free Demo Review</h3>
-            <p className={s.modalSub}>Free Google Meet Demo • June 5, 2026 • Check your email for the link</p>
+            <p className={s.modalSub}>Free Google Meet Demo • june 3, 2026 • Check your email for the link</p>
 
             {done ? (
               <div className={s.successBox}>

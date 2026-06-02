@@ -33,7 +33,7 @@
 /* Layout and basic styles */
 .page {
   min-height: 100vh;
-  background: #f5f5f7;
+  background: #ffffff;
   color: #1d1d1f;
   font-family: var(--font-body);
 }
@@ -51,11 +51,9 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: #ffffff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  height: 52px;
+  height: 80px;
 }
 
 .navInner {
@@ -67,18 +65,18 @@
 
 .navLogo {
   display: block;
-  width: 90px;
+  width: 250px;
   height: auto;
 }
 
 .navCta {
   display: inline-flex;
   align-items: center;
-  padding: 6px 16px;
+  padding: 16px 36px;
   border-radius: 999px;
   background: #e60000;
   color: #fff;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -89,12 +87,42 @@
   opacity: 0.85;
 }
 
+@media (max-width: 768px) {
+  .nav {
+    height: 70px;
+  }
+
+  .navLogo {
+    width: 180px;
+  }
+
+  .navCta {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    height: 60px;
+  }
+
+  .navLogo {
+    width: 120px;
+  }
+
+  .navCta {
+    padding: 10px 18px;
+    font-size: 12px;
+  }
+}
+
 /* Hero section */
 .hero {
   padding: 120px 0 80px;
   background: #ffffff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  margin-top: 52px;
+  margin-top: 80px;
 }
 
 .heroGrid {
@@ -197,9 +225,7 @@
 
 /* Trust Bar */
 .trustBar {
-  padding: 8px 0;
-  background: #f8f9fa;
-  border-bottom: 1px solid #e5e5e5;
+  display: none;
 }
 
 .trustBadge {
@@ -398,7 +424,11 @@
 
 .heroImage {
   width: 100%;
+  height: auto;
   border-radius: 16px;
+  display: block;
+  transform: scale(1.4);
+  transform-origin: center;
 }
 
 .heroImageCaption {
@@ -427,11 +457,11 @@
 .heroCta {
   display: inline-flex;
   align-items: center;
-  padding: 14px 32px;
+  padding: 18px 42px;
   border-radius: 999px;
   background: linear-gradient(135deg, #1B4D3E 0%, #0F2818 100%);
   color: #fff;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   border: none;
   cursor: pointer;

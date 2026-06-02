@@ -168,7 +168,7 @@ export default function BookingForm({ onSuccess }: Props) {
         </label>
 
         <label htmlFor="schedule" className={styles.label}>Demo Date
-          <input id="schedule" name="schedule" className={styles.input} value="June 5, 2026" readOnly aria-readonly="true" />
+          <input id="schedule" name="schedule" className={styles.input} value="june 3, 2026" readOnly aria-readonly="true" />
         </label>
       </div>
 
