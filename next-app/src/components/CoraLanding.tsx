@@ -205,7 +205,7 @@ export default function CoraLanding() {
             <div className={s.stepDivider}></div>
             <div className={s.stepItem}>
               <span className={s.stepNum}>3</span>
-              <p>Join the june 3, 2026 Google Meet demo</p>
+              <p>Join the june 5, 2026 Google Meet demo</p>
             </div>
           </div>
         </div>
@@ -296,7 +296,7 @@ export default function CoraLanding() {
             <button className={s.modalClose} onClick={close} aria-label="Close">✕</button>
 
             <h3 className={s.modalTitle}>Book Your Free Demo Review</h3>
-            <p className={s.modalSub}>Free Google Meet Demo • june 3, 2026 • Check your email for the link</p>
+            <p className={s.modalSub}>Free Google Meet Demo • june 5, 2026 • Check your email for the link</p>
 
             {done ? (
               <div className={s.successBox}>
