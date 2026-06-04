@@ -2,37 +2,53 @@ import { useState } from 'react'
 import { getIronSession } from 'iron-session'
 import type { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { sessionOptions, SessionData } from '../../lib/auth'
+import { getAllContent } from '../../lib/db'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const session = (await getIronSession<SessionData>(context.req as NextApiRequest, context.res as NextApiResponse, sessionOptions))
   if (!session?.isLoggedIn) {
     return { redirect: { destination: '/admin/login', permanent: false } }
   }
-  return { props: {} }
+  try {
+    const rows = await getAllContent()
+    const props: any = {}
+    for (const row of rows) {
+      if (row.content_json) {
+        props[row.section + '_' + row.content_key] = row.content_json
+      } else {
+        props[row.section + '_' + row.content_key] = row.content_value || ''
+      }
+    }
+    return { props }
+  } catch {
+    return { props: {} }
+  }
 }
 
-export default function AdminPage() {
+export default function AdminPage({ initialContent = {} }: any) {
   const [saving, setSaving] = useState(false)
   const [msg, setMsg] = useState('')
   const [err, setErr] = useState('')
+  const [demoDates, setDemoDates] = useState<string[]>(initialContent.multi_dates || [])
+  const [newDate, setNewDate] = useState('')
 
-  // Each field has its own local state — no complex arrays, no callbacks
-  const [demoDate, setDemoDate] = useState('june 5, 2026')
-  const [headline, setHeadline] = useState('Stress-Free Cooperative Records')
-  const [subheadline, setSubheadline] = useState('Discover how CORA helps Multi-Purpose, Credit, and Agricultural cooperatives across the Philippines manage member records, compute accurate dividends, and prepare for CDA evaluations with zero technical hassle.')
-  const [ctaText, setCtaText] = useState('Request a Free System Demonstration')
-  const [modalTitle, setModalTitle] = useState('Book Your Free Demo Review')
-  const [modalSub, setModalSub] = useState('Free Google Meet Demo • june 5, 2026 • Check your email for the link')
-  const [step1, setStep1] = useState('Fill out the form — takes less than 60 seconds')
-  const [step2, setStep2] = useState('Receive Google Meet link via email within 15 minutes')
-  const [step3, setStep3] = useState('Join the june 5, 2026 Google Meet demo')
-  const [badge1, setBadge1] = useState('CDA-Aligned')
-  const [badge2, setBadge2] = useState('DPA-Compliant')
-  const [badge3, setBadge3] = useState('Secure Cloud')
-  const [footerEmail, setFooterEmail] = useState('edgepoint.solutions.inc@gmail.com')
-  const [footerPhone, setFooterPhone] = useState('0962 807 3120')
-  const [footerAddress, setFooterAddress] = useState('2/F Edgepoint Building, P. Burgos St., Naga City, Camarines Sur 4400')
-  const [footerHours, setFooterHours] = useState('Mondays to Fridays, 8:00 AM – 5:00 PM PHT')
+  // Initialize fields from DB or fallback to defaults
+  const [demoDate, setDemoDate] = useState(initialContent.hero_demo_date || 'june 5, 2026')
+  const [headline, setHeadline] = useState(initialContent.hero_headline || 'Stress-Free Cooperative Records')
+  const [subheadline, setSubheadline] = useState(initialContent.hero_subheadline || '')
+  const [ctaText, setCtaText] = useState(initialContent.hero_cta_text || '')
+  const [modalTitle, setModalTitle] = useState(initialContent.hero_modal_title || '')
+  const [modalSub, setModalSub] = useState(initialContent.hero_modal_sub || '')
+  const [step1, setStep1] = useState(initialContent.steps_step1 || '')
+  const [step2, setStep2] = useState(initialContent.steps_step2 || '')
+  const [step3, setStep3] = useState(initialContent.steps_step3 || '')
+  const [badge1, setBadge1] = useState(initialContent.trust_badge1 || '')
+  const [badge2, setBadge2] = useState(initialContent.trust_badge2 || '')
+  const [badge3, setBadge3] = useState(initialContent.trust_badge3 || '')
+  const [footerEmail, setFooterEmail] = useState(initialContent.footer_contact_email || '')
+  const [footerPhone, setFooterPhone] = useState(initialContent.footer_contact_phone || '')
+  const [footerAddress, setFooterAddress] = useState(initialContent.footer_contact_office || '')
+  const [footerHours, setFooterHours] = useState(initialContent.footer_contact_hours || '')
 
   async function handleSave() {
     setSaving(true)
@@ -56,6 +72,7 @@ export default function AdminPage() {
         { section: 'footer', content_key: 'contact_phone', content_value: footerPhone },
         { section: 'footer', content_key: 'contact_office', content_value: footerAddress },
         { section: 'footer', content_key: 'contact_hours', content_value: footerHours },
+        { section: 'multi', content_key: 'dates', content_json: demoDates },
       ]
       const res = await fetch('/api/admin/update', {
         method: 'POST',
@@ -63,7 +80,7 @@ export default function AdminPage() {
         body: JSON.stringify(body),
       })
       if (res.ok) {
-        setMsg('Saved! Public page is updated.')
+        setMsg('Saved! All changes are live.')
         setTimeout(() => setMsg(''), 3000)
       } else {
         setErr('Save failed')
@@ -75,43 +92,29 @@ export default function AdminPage() {
     }
   }
 
+  function addDate() {
+    if (newDate.trim() && !demoDates.includes(newDate.trim())) {
+      setDemoDates([...demoDates, newDate.trim()])
+      setNewDate('')
+    }
+  }
+
+  function removeDate(index: number) {
+    setDemoDates(demoDates.filter((_, i) => i !== index))
+  }
+
   async function handleLogout() {
     await fetch('/api/admin/logout', { method: 'POST' })
     window.location.href = '/admin/login'
   }
 
   const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '10px 12px',
-    border: '1px solid #d1d5db',
-    borderRadius: 6,
-    fontSize: 14,
-    boxSizing: 'border-box',
-    background: '#fff',
-    color: '#1d1d1f',
-    marginTop: 4,
-    marginBottom: 12,
+    width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: 6,
+    fontSize: 14, boxSizing: 'border-box', background: '#fff', color: '#1d1d1f', marginTop: 4, marginBottom: 12,
   }
-
-  const textareaStyle: React.CSSProperties = {
-    ...inputStyle,
-    minHeight: 60,
-    resize: 'vertical' as const,
-  }
-
-  const labelStyle: React.CSSProperties = {
-    display: 'block',
-    fontSize: 13,
-    fontWeight: 600,
-    color: '#374151',
-    marginBottom: 2,
-  }
-
-  const sectionStyle: React.CSSProperties = {
-    marginBottom: 32,
-    paddingBottom: 24,
-    borderBottom: '1px solid #e5e5e5',
-  }
+  const textareaStyle: React.CSSProperties = { ...inputStyle, minHeight: 60, resize: 'vertical' as const }
+  const labelStyle: React.CSSProperties = { display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 2 }
+  const sectionStyle: React.CSSProperties = { marginBottom: 32, paddingBottom: 24, borderBottom: '1px solid #e5e5e5' }
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px', fontFamily: 'system-ui, sans-serif' }}>
@@ -119,7 +122,7 @@ export default function AdminPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>Content Editor</h1>
-          <p style={{ fontSize: 13, color: '#6b7280', margin: '4px 0 0' }}>Edit fields below, then click Save.</p>
+          <p style={{ fontSize: 13, color: '#6b7280', margin: '4px 0 0' }}>Edit fields below, then click Save. All changes go live instantly.</p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {msg && <span style={{ color: '#16a34a', fontSize: 13, fontWeight: 500 }}>{msg}</span>}
@@ -134,7 +137,7 @@ export default function AdminPage() {
       {/* HERO */}
       <div style={sectionStyle}>
         <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 16px' }}>Hero Section</h2>
-        <label style={labelStyle}>Demo Date</label>
+        <label style={labelStyle}>Demo Date (primary)</label>
         <input style={inputStyle} value={demoDate} onChange={e => setDemoDate(e.target.value)} placeholder="e.g., june 5, 2026" />
         <label style={labelStyle}>Headline</label>
         <textarea style={textareaStyle} value={headline} onChange={e => setHeadline(e.target.value)} rows={2} />
@@ -146,6 +149,33 @@ export default function AdminPage() {
         <input style={inputStyle} value={modalTitle} onChange={e => setModalTitle(e.target.value)} />
         <label style={labelStyle}>Modal Subtitle</label>
         <textarea style={textareaStyle} value={modalSub} onChange={e => setModalSub(e.target.value)} rows={2} />
+      </div>
+
+      {/* MULTI-DATE WORKFLOWS */}
+      <div style={sectionStyle}>
+        <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Demo Dates (Automated Workflows)</h2>
+        <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 12 }}>Add multiple dates for automated reminders, scheduling, and date-based workflows. These dates can be used by integrations to trigger actions.</p>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+          <input
+            style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
+            value={newDate}
+            onChange={e => setNewDate(e.target.value)}
+            placeholder="e.g., june 12, 2026"
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addDate() } }}
+          />
+          <button onClick={addDate} style={{ padding: '10px 20px', background: '#1B4D3E', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}>Add Date</button>
+        </div>
+        {demoDates.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {demoDates.map((date, i) => (
+              <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 6, fontSize: 13, color: '#166534' }}>
+                {date}
+                <button onClick={() => removeDate(i)} style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: 0 }}>×</button>
+              </span>
+            ))}
+          </div>
+        )}
+        {demoDates.length === 0 && <p style={{ fontSize: 12, color: '#9ca3af' }}>No dates added yet. Add your first demo date above.</p>}
       </div>
 
       {/* STEPS */}
@@ -183,9 +213,7 @@ export default function AdminPage() {
         <input style={inputStyle} value={footerHours} onChange={e => setFooterHours(e.target.value)} />
       </div>
 
-      <p style={{ fontSize: 12, color: '#9ca3af', marginTop: 24 }}>
-        Changes are saved to the database. Visit the public page to see updates.
-      </p>
+      <p style={{ fontSize: 12, color: '#9ca3af', marginTop: 24 }}>Changes are saved to the database. Visit the public page to see updates.</p>
     </div>
   )
 }
