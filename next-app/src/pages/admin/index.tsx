@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, createElement } from 'react'
 import { getIronSession } from 'iron-session'
 import type { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { sessionOptions, SessionData } from '../../lib/auth'
@@ -167,22 +167,18 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
         />
       )
     }
-    return (
-      <Tag
-        onClick={() => startEdit(fieldKey, value)}
-        title="Click to edit"
-        style={{
-          cursor: 'pointer',
-          borderBottom: '2px dashed transparent',
-          transition: 'border-color 150ms',
-          ...style,
-        }}
-        onMouseEnter={e => (e.currentTarget.style.borderBottomColor = '#1B4D3E')}
-        onMouseLeave={e => (e.currentTarget.style.borderBottomColor = 'transparent')}
-      >
-        {value || <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>Click to add text</span>}
-      </Tag>
-    )
+    return createElement(Tag, {
+      onClick: () => startEdit(fieldKey, value),
+      title: 'Click to edit',
+      style: {
+        cursor: 'pointer',
+        borderBottom: '2px dashed transparent',
+        transition: 'border-color 150ms',
+        ...style,
+      },
+      onMouseEnter: (e: any) => (e.currentTarget.style.borderBottomColor = '#1B4D3E'),
+      onMouseLeave: (e: any) => (e.currentTarget.style.borderBottomColor = 'transparent'),
+    }, value || <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>Click to add text</span>)
   }
 
   function EditableInput({ fieldKey, value, placeholder = '' }: { fieldKey: string; value: any; placeholder?: string }) {
