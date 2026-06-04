@@ -41,6 +41,7 @@ export async function getServerSideProps() {
   const footerPhone = rows.find((r: any) => r.section === 'footer' && r.content_key === 'contact_phone')
   const footerOffice = rows.find((r: any) => r.section === 'footer' && r.content_key === 'contact_office')
   const footerHours = rows.find((r: any) => r.section === 'footer' && r.content_key === 'contact_hours')
+  const multiDatesRow = rows.find((r: any) => r.section === 'multi' && r.content_key === 'dates')
 
   return {
     props: {
@@ -81,6 +82,7 @@ export async function getServerSideProps() {
       footerPhone: footerPhone ? footerPhone.content_value : '',
       footerOffice: footerOffice ? footerOffice.content_value : '',
       footerHours: footerHours ? footerHours.content_value : '',
+      multiDates: multiDatesRow ? multiDatesRow.content_json : [],
     },
   }
 }
