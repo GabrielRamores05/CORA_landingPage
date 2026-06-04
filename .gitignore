@@ -9,6 +9,7 @@ next-app/.next/
 .env
 .env.*
 !.env.example
+next-app/.env*
 
 # Vercel
 .vercel/
