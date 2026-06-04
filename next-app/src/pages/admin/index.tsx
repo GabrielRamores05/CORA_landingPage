@@ -1,4 +1,4 @@
-import { useState, createElement } from 'react'
+import { useState } from 'react'
 import { getIronSession } from 'iron-session'
 import type { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { sessionOptions, SessionData } from '../../lib/auth'
@@ -93,8 +93,9 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
   function addDate() {
     const trimmed = newDate.trim()
     if (trimmed && !demoDates.includes(trimmed)) {
-      setDemoDates([...demoDates, trimmed])
-      updateField('multi_dates', [...demoDates, trimmed])
+      const next = [...demoDates, trimmed]
+      setDemoDates(next)
+      updateField('multi_dates', next)
       setNewDate('')
     }
   }
@@ -112,7 +113,9 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
     try {
       const body: any[] = []
       for (const [key, value] of Object.entries(fields)) {
-        const [section, contentKey] = key.split('_', 2)
+        const parts = key.split('_')
+        const section = parts[0]
+        const contentKey = parts.slice(1).join('_')
         if (!section || !contentKey) continue
         body.push({
           section,
@@ -145,11 +148,13 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
     window.location.href = '/admin/login'
   }
 
-  function EditableText({ fieldKey, value, tag: Tag = 'span', style = {} }: { fieldKey: string; value: any; tag?: string; style?: React.CSSProperties }) {
+  // Inline editable text component — mimics the real page's typography
+  function Editable({ fieldKey, value, tag: Tag = 'span', style = {}, placeholder = 'Click to add text', multiline = false }: any) {
     const isEditing = editingField === fieldKey
     if (isEditing) {
+      const Input: any = multiline ? 'textarea' : 'input'
       return (
-        <textarea
+        <Input
           autoFocus
           value={editValue}
           onChange={e => setEditValue(e.target.value)}
@@ -162,69 +167,27 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
             width: '100%', padding: 8, border: '2px solid #1B4D3E', borderRadius: 6,
             fontSize: 14, fontFamily: 'inherit', background: '#fff', color: '#1d1d1f',
             boxSizing: 'border-box', resize: 'vertical', minHeight: 40, outline: 'none',
+            ...(multiline ? { minHeight: 60, lineHeight: 1.5 } : {}),
             ...style,
           }}
         />
       )
     }
-    return createElement(Tag, {
-      onClick: () => startEdit(fieldKey, value),
-      title: 'Click to edit',
-      style: {
-        cursor: 'pointer',
-        borderBottom: '2px dashed transparent',
-        transition: 'border-color 150ms',
-        ...style,
-      },
-      onMouseEnter: (e: any) => (e.currentTarget.style.borderBottomColor = '#1B4D3E'),
-      onMouseLeave: (e: any) => (e.currentTarget.style.borderBottomColor = 'transparent'),
-    }, value || <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>Click to add text</span>)
-  }
-
-  function EditableInput({ fieldKey, value, placeholder = '' }: { fieldKey: string; value: any; placeholder?: string }) {
-    const isEditing = editingField === fieldKey
-    if (isEditing) {
-      return (
-        <input
-          autoFocus
-          value={editValue}
-          onChange={e => setEditValue(e.target.value)}
-          onBlur={() => commitEdit(fieldKey)}
-          onKeyDown={e => {
-            if (e.key === 'Enter') { e.preventDefault(); commitEdit(fieldKey) }
-            if (e.key === 'Escape') { setEditingField(null); setEditValue('') }
-          }}
-          style={{
-            width: '100%', padding: 8, border: '2px solid #1B4D3E', borderRadius: 6,
-            fontSize: 14, fontFamily: 'inherit', background: '#fff', color: '#1d1d1f',
-            boxSizing: 'border-box', outline: 'none',
-          }}
-        />
-      )
-    }
     return (
-      <input
-        readOnly
-        value={value || ''}
-        placeholder={placeholder}
+      <Tag
         onClick={() => startEdit(fieldKey, value)}
+        title="Click to edit"
         style={{
           cursor: 'pointer',
-          border: '2px dashed transparent',
-          borderRadius: 6,
-          padding: 8,
-          fontSize: 14,
-          fontFamily: 'inherit',
-          background: 'transparent',
-          color: value ? 'inherit' : '#9ca3af',
-          fontStyle: value ? 'normal' : 'italic',
-          boxSizing: 'border-box',
-          width: '100%',
+          borderBottom: '2px dashed transparent',
           transition: 'border-color 150ms',
+          ...style,
         }}
-        onMouseEnter={e => (e.currentTarget.style.borderColor = '#1B4D3E')}
-        onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
-      />
+        onMouseEnter={(e: any) => (e.currentTarget.style.borderBottomColor = '#1B4D3E')}
+        onMouseLeave={(e: any) => (e.currentTarget.style.borderBottomColor = 'transparent')}
+      >
+        {value || <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>{placeholder}</span>}
+      </Tag>
     )
   }
 
@@ -237,8 +200,8 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
       }}>
         <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>🖊️ Landing Page Editor</h1>
-          <p style={{ fontSize: 12, opacity: 0.8, margin: '2px 0 0' }}>Click any text on the page to edit it. Changes save to the database.</p>
+          <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>🖊️ Landing Page Editor — WYSIWYG</h1>
+          <p style={{ fontSize: 12, opacity: 0.8, margin: '2px 0 0' }}>Click any text on the page to edit it inline. Press Enter to confirm, Escape to cancel. Then click Save Changes.</p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {msg && <span style={{ color: '#86efac', fontSize: 13, fontWeight: 500 }}>{msg}</span>}
@@ -266,116 +229,149 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
         </div>
       </div>
 
-      {/* WYSIWYG Page Preview */}
-      <div style={{ maxWidth: 1140, margin: '0 auto', padding: '24px', background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-
-        {/* Trust Bar */}
-        <div style={{ padding: '12px 0', borderBottom: '1px solid #f0f0f0', display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-          <EditableText fieldKey="trust_badge1" value={fields.trust_badge1} tag="span" style={{ fontSize: 12, fontWeight: 600, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
-          <EditableText fieldKey="trust_badge2" value={fields.trust_badge2} tag="span" style={{ fontSize: 12, fontWeight: 600, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
-          <EditableText fieldKey="trust_badge3" value={fields.trust_badge3} tag="span" style={{ fontSize: 12, fontWeight: 600, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
+      {/* Multi-Date Manager */}
+      <div style={{ maxWidth: 1140, margin: '0 auto', padding: '24px', background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px', color: '#1d1d1f' }}>📅 Demo Dates (Automated Workflows)</h3>
+        <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 12 }}>Add multiple dates for automated reminders, scheduling, and date-based workflows.</p>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+          <input
+            style={{ flex: 1, padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 14, boxSizing: 'border-box' }}
+            value={newDate}
+            onChange={e => setNewDate(e.target.value)}
+            placeholder="e.g., june 12, 2026"
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addDate() } }}
+          />
+          <button onClick={addDate} style={{ padding: '10px 20px', background: '#1B4D3E', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Add Date</button>
         </div>
+        {demoDates.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {demoDates.map((date, i) => (
+              <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 6, fontSize: 13, color: '#166534' }}>
+                {date}
+                <button onClick={() => removeDate(i)} style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: 0 }}>×</button>
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
 
-        {/* Hero */}
-        <div style={{ padding: '80px 0', background: '#fff' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60, alignItems: 'center' }}>
-            <div>
-              <div style={{
-                display: 'inline-block', padding: '8px 16px', borderRadius: 999,
-                background: 'rgba(27,77,62,0.08)', border: '1.5px solid #1B4D3E',
-                fontSize: 11, fontWeight: 700, color: '#1B4D3E', textTransform: 'uppercase',
-                letterSpacing: '0.05em', marginBottom: 24,
-              }}>
-                MODERN, CDA-COMPLIANT SYSTEM
-              </div>
-              <h1 style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, lineHeight: 1.1,
-                color: '#1d1d1f', margin: '0 0 24px',
-              }}>
-                <EditableText fieldKey="hero_headline" value={fields.hero_headline} tag="span" />
-              </h1>
-              <p style={{ fontSize: 16, color: '#525252', lineHeight: 1.6, margin: '0 0 32px', maxWidth: 600 }}>
-                <EditableText fieldKey="hero_subheadline" value={fields.hero_subheadline} tag="span" />
-              </p>
-              <div style={{
-                background: 'rgba(27,77,62,0.04)', borderLeft: '4px solid #1B4D3E',
-                padding: '16px 20px', marginBottom: 32, maxWidth: 540,
-              }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
-                  <EditableText fieldKey="hero_cta_text" value={fields.hero_cta_text} tag="span" style={{ fontSize: 10, fontWeight: 700, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.1em' }} />
-                </div>
-                <p style={{ fontSize: 14, color: '#1d1d1f', margin: 0 }}>
-                  Built for PH Cooperatives — No credit card required. Receive Google Meet link via email.
-                </p>
-              </div>
-              <button style={{
-                padding: '18px 42px', borderRadius: 999, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #1B4D3E 0%, #0F2818 100%)', color: '#fff',
-                fontSize: 18, fontWeight: 700, boxShadow: '0 4px 16px rgba(27,77,62,0.25)',
-              }}>
-                <EditableText fieldKey="hero_cta_text" value={fields.hero_cta_text} tag="span" style={{ fontSize: 18, fontWeight: 700 }} />
+      {/* WYSIWYG Landing Page — mirrors the real page layout */}
+      <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 24px 24px' }}>
+        <div style={{ background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', borderRadius: 8, overflow: 'hidden' }}>
+
+          {/* Nav */}
+          <div style={{ position: 'sticky', top: 0, background: '#fff', borderBottom: '1px solid #f0f0f0', padding: '16px 0', zIndex: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 1140, margin: '0 auto', padding: '0 24px' }}>
+              <div style={{ fontSize: 20, fontWeight: 700, color: '#1B4D3E', letterSpacing: '-0.02em' }}>CORA</div>
+              <button style={{ padding: '10px 24px', borderRadius: 999, background: '#e60000', color: '#fff', border: 'none', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}>
+                <Editable fieldKey="nav_cta_text" value={fields.nav_cta_text || 'Book Free Demo'} tag="span" style={{ fontSize: 14, fontWeight: 500, color: '#fff' }} />
               </button>
             </div>
-            <div style={{ position: 'relative' }}>
-              <div style={{
-                background: '#f0f0f0', borderRadius: 16, aspectRatio: '4/3',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontSize: 14,
-              }}>
-                [Hero Image Placeholder]
-              </div>
-            </div>
           </div>
-        </div>
 
-        {/* Steps */}
-        <div style={{ padding: '80px 0', background: '#fff' }}>
-          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, textAlign: 'center', margin: '0 0 40px', color: '#1d1d1f' }}>
-            What Happens Next
-          </h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap' }}>
-            {[fields.steps_step1, fields.steps_step2, fields.steps_step3].map((step: any, i: number) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15, color: '#1d1d1f', maxWidth: 250 }}>
-                <span style={{
-                  width: 32, height: 32, borderRadius: '50%', background: '#1B4D3E', color: '#fff',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, flexShrink: 0,
-                }}>{i + 1}</span>
-                <EditableText fieldKey={'steps_step' + (i + 1)} value={step} tag="span" />
-              </div>
-            ))}
+          {/* Trust Bar */}
+          <div style={{ padding: '12px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+            <Editable fieldKey="trust_badge1" value={fields.trust_badge1} tag="span" style={{ fontSize: 12, fontWeight: 600, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
+            <Editable fieldKey="trust_badge2" value={fields.trust_badge2} tag="span" style={{ fontSize: 12, fontWeight: 600, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
+            <Editable fieldKey="trust_badge3" value={fields.trust_badge3} tag="span" style={{ fontSize: 12, fontWeight: 600, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
           </div>
-        </div>
 
-        {/* Trust Bar (alt) */}
-        <div style={{ padding: '60px 0', background: '#f8f9fa' }}>
-          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, textAlign: 'center', margin: '0 0 40px', color: '#1d1d1f' }}>
-            Trust Bar Badges
-          </h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 40, flexWrap: 'wrap' }}>
-            {[fields.trust_badge1, fields.trust_badge2, fields.trust_badge3].map((badge: any, i: number) => (
-              <div key={i} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 32, fontWeight: 700, color: '#1B4D3E', marginBottom: 4 }}>
-                  <EditableText fieldKey={'trust_badge' + (i + 1)} value={badge} tag="span" style={{ fontSize: 32, fontWeight: 700, color: '#1B4D3E' }} />
+          {/* Hero */}
+          <div style={{ padding: '80px 24px', background: '#fff' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60, alignItems: 'center', maxWidth: 1140, margin: '0 auto' }}>
+              <div>
+                <div style={{
+                  display: 'inline-block', padding: '8px 16px', borderRadius: 999,
+                  background: 'rgba(27,77,62,0.08)', border: '1.5px solid #1B4D3E',
+                  fontSize: 11, fontWeight: 700, color: '#1B4D3E', textTransform: 'uppercase',
+                  letterSpacing: '0.05em', marginBottom: 24,
+                }}>
+                  MODERN, CDA-COMPLIANT SYSTEM
+                </div>
+                <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, lineHeight: 1.1, color: '#1d1d1f', margin: '0 0 24px' }}>
+                  <Editable fieldKey="hero_headline" value={fields.hero_headline} tag="span" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, lineHeight: 1.1, color: '#1d1d1f' }} />
+                </h1>
+                <p style={{ fontSize: 16, color: '#525252', lineHeight: 1.6, margin: '0 0 32px', maxWidth: 600 }}>
+                  <Editable fieldKey="hero_subheadline" value={fields.hero_subheadline} tag="span" style={{ fontSize: 16, color: '#525252', lineHeight: 1.6 }} multiline />
+                </p>
+                <div style={{
+                  background: 'rgba(27,77,62,0.04)', borderLeft: '4px solid #1B4D3E',
+                  padding: '16px 20px', marginBottom: 32, maxWidth: 540,
+                }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
+                    <Editable fieldKey="hero_cta_text" value={fields.hero_cta_text} tag="span" style={{ fontSize: 10, fontWeight: 700, color: '#1B4D3E', textTransform: 'uppercase', letterSpacing: '0.1em' }} />
+                  </div>
+                  <p style={{ fontSize: 14, color: '#1d1d1f', margin: 0 }}>Built for PH Cooperatives — No credit card required. Receive Google Meet link via email.</p>
+                </div>
+                <button style={{
+                  padding: '18px 42px', borderRadius: 999, border: 'none', cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #1B4D3E 0%, #0F2818 100%)', color: '#fff',
+                  fontSize: 18, fontWeight: 700, boxShadow: '0 4px 16px rgba(27,77,62,0.25)',
+                }}>
+                  <Editable fieldKey="hero_cta_text" value={fields.hero_cta_text} tag="span" style={{ fontSize: 18, fontWeight: 700, color: '#fff' }} />
+                </button>
+              </div>
+              <div style={{ position: 'relative' }}>
+                <div style={{
+                  background: '#f0f0f0', borderRadius: 16, aspectRatio: '4/3',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontSize: 14,
+                }}>
+                  [Hero Image Placeholder]
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div style={{ padding: '56px 0', background: '#1B4D3E', color: '#fff' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>
-              <EditableText fieldKey="footer_contact_email" value={fields.footer_contact_email} tag="span" style={{ fontSize: 24, fontWeight: 700 }} />
             </div>
-            <p style={{ fontSize: 14, color: '#e5e5e5', marginBottom: 4 }}>
-              <EditableText fieldKey="footer_contact_phone" value={fields.footer_contact_phone} tag="span" style={{ fontSize: 14, color: '#e5e5e5' }} />
-            </p>
-            <p style={{ fontSize: 13, color: '#e5e5e5', marginBottom: 4 }}>
-              <EditableText fieldKey="footer_contact_office" value={fields.footer_contact_office} tag="span" style={{ fontSize: 13, color: '#e5e5e5' }} />
-            </p>
-            <p style={{ fontSize: 13, color: '#e5e5e5' }}>
-              <EditableText fieldKey="footer_contact_hours" value={fields.footer_contact_hours} tag="span" style={{ fontSize: 13, color: '#e5e5e5' }} />
-            </p>
+          </div>
+
+          {/* Steps */}
+          <div style={{ padding: '80px 24px', background: '#fff' }}>
+            <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, textAlign: 'center', margin: '0 0 40px', color: '#1d1d1f' }}>
+              What Happens Next
+            </h2>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap', maxWidth: 1140, margin: '0 auto' }}>
+              {[fields.steps_step1, fields.steps_step2, fields.steps_step3].map((step: any, i: number) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15, color: '#1d1d1f', maxWidth: 250 }}>
+                  <span style={{
+                    width: 32, height: 32, borderRadius: '50%', background: '#1B4D3E', color: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, flexShrink: 0,
+                  }}>{i + 1}</span>
+                  <Editable fieldKey={'steps_step' + (i + 1)} value={step} tag="span" style={{ fontSize: 15, color: '#1d1d1f' }} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Trust Bar (alt) */}
+          <div style={{ padding: '60px 24px', background: '#f8f9fa' }}>
+            <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, textAlign: 'center', margin: '0 0 40px', color: '#1d1d1f' }}>
+              Trust Bar Badges
+            </h2>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 40, flexWrap: 'wrap' }}>
+              {[fields.trust_badge1, fields.trust_badge2, fields.trust_badge3].map((badge: any, i: number) => (
+                <div key={i} style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 32, fontWeight: 700, color: '#1B4D3E', marginBottom: 4 }}>
+                    <Editable fieldKey={'trust_badge' + (i + 1)} value={badge} tag="span" style={{ fontSize: 32, fontWeight: 700, color: '#1B4D3E' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{ padding: '56px 24px', background: '#1B4D3E', color: '#fff' }}>
+            <div style={{ textAlign: 'center', maxWidth: 1140, margin: '0 auto' }}>
+              <div style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>
+                <Editable fieldKey="footer_contact_email" value={fields.footer_contact_email} tag="span" style={{ fontSize: 24, fontWeight: 700 }} />
+              </div>
+              <p style={{ fontSize: 14, color: '#e5e5e5', marginBottom: 4 }}>
+                <Editable fieldKey="footer_contact_phone" value={fields.footer_contact_phone} tag="span" style={{ fontSize: 14, color: '#e5e5e5' }} />
+              </p>
+              <p style={{ fontSize: 13, color: '#e5e5e5', marginBottom: 4 }}>
+                <Editable fieldKey="footer_contact_office" value={fields.footer_contact_office} tag="span" style={{ fontSize: 13, color: '#e5e5e5' }} />
+              </p>
+              <p style={{ fontSize: 13, color: '#e5e5e5' }}>
+                <Editable fieldKey="footer_contact_hours" value={fields.footer_contact_hours} tag="span" style={{ fontSize: 13, color: '#e5e5e5' }} />
+              </p>
+            </div>
           </div>
         </div>
       </div>
