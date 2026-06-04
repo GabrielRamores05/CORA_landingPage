@@ -17,7 +17,7 @@ export const sessionOptions = {
 
 export function withSession(handler: any) {
   return async (req: any, res: any) => {
-    const session = await getIronSession<SessionData>(req, res, sessionOptions)
+    const session = (await getIronSession(req, res, sessionOptions)) as IronSession<SessionData> & SessionData
     return handler(req, res, session)
   }
 }
