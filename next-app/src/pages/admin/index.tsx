@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getIronSession } from 'iron-session'
 import type { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { sessionOptions, SessionData } from '../../lib/auth'
@@ -45,7 +45,7 @@ const FALLBACKS: ContentProps = {
 }
 
 function getInitial(prop: any, fallback: any) {
-  if (prop !== undefined && prop !== null && prop !== '') return prop
+  if (prop !== undefined && prop !== null) return prop
   return fallback
 }
 
@@ -55,16 +55,44 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
   const [err, setErr] = useState('')
   const [editingField, setEditingField] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
+  const [dbContent, setDbContent] = useState<ContentProps>({})
 
-  const data: ContentProps = {}
+  // Reload from database on mount to ensure we have the latest data
+  useEffect(() => {
+    async function reload() {
+      try {
+        const res = await fetch('/api/admin/content')
+        if (res.ok) {
+          const rows = await res.json()
+          const props: ContentProps = {}
+          for (const row of rows) {
+            const key = row.section + '_' + row.content_key
+            props[key] = row.content_json ?? row.content_value ?? ''
+          }
+          setDbContent(props)
+        }
+      } catch { /* ignore */ }
+    }
+    reload()
+  }, [])
+
+  // Merge DB content with fallbacks — DB content ALWAYS takes priority
+  const merged: ContentProps = {}
   for (const key of Object.keys(FALLBACKS)) {
-    data[key] = getInitial(initialContent[key], FALLBACKS[key])
+    const dbVal = dbContent[key]
+    merged[key] = (dbVal !== undefined && dbVal !== null && dbVal !== '') ? dbVal : FALLBACKS[key]
   }
-  if (initialContent.multi_dates) data.multi_dates = initialContent.multi_dates
+  if (dbContent.multi_dates) merged.multi_dates = dbContent.multi_dates
 
-  const [fields, setFields] = useState<ContentProps>(data)
-  const [demoDates, setDemoDates] = useState<string[]>(data.multi_dates || [])
+  const [fields, setFields] = useState<ContentProps>(merged)
+  const [demoDates, setDemoDates] = useState<string[]>(merged.multi_dates || [])
   const [newDate, setNewDate] = useState('')
+
+  // Sync fields when dbContent updates from the API
+  useEffect(() => {
+    setFields(merged)
+    setDemoDates(merged.multi_dates || [])
+  }, [dbContent])
 
   function startEdit(fieldKey: string, currentValue: any) {
     setEditingField(fieldKey)
@@ -148,6 +176,35 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
     window.location.href = '/admin/login'
   }
 
+  async function reloadFromDb() {
+    setMsg('Reloading from database...')
+    setErr('')
+    try {
+      const res = await fetch('/api/admin/content')
+      if (res.ok) {
+        const rows = await res.json()
+        const props: ContentProps = {}
+        for (const row of rows) {
+          const key = row.section + '_' + row.content_key
+          props[key] = row.content_json ?? row.content_value ?? ''
+        }
+        const merged: ContentProps = {}
+        for (const key of Object.keys(FALLBACKS)) {
+          merged[key] = props[key] !== undefined && props[key] !== null ? props[key] : FALLBACKS[key]
+        }
+        if (props.multi_dates) merged.multi_dates = props.multi_dates
+        setFields(merged)
+        setDemoDates(merged.multi_dates || [])
+        setMsg('Reloaded from database.')
+        setTimeout(() => setMsg(''), 2000)
+      } else {
+        setErr('Failed to reload')
+      }
+    } catch {
+      setErr('Network error')
+    }
+  }
+
   // Inline editable text component — mimics the real page's typography
   function Editable({ fieldKey, value, tag: Tag = 'span', style = {}, placeholder = 'Click to add text', multiline = false }: any) {
     const isEditing = editingField === fieldKey
@@ -225,6 +282,15 @@ export default function AdminPage({ initialContent = {} }: { initialContent: Con
             }}
           >
             Logout
+          </button>
+          <button
+            onClick={reloadFromDb}
+            style={{
+              padding: '10px 16px', background: 'rgba(255,255,255,0.15)', color: '#fff',
+              border: '1px solid rgba(255,255,255,0.3)', borderRadius: 8, fontSize: 13, cursor: 'pointer',
+            }}
+          >
+            🔄 Reload
           </button>
         </div>
       </div>
