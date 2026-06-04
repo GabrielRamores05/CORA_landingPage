@@ -302,7 +302,7 @@ export default function CoraLanding({
             <button className={s.modalClose} onClick={close} aria-label="Close">✕</button>
 
             <h3 className={s.modalTitle}>{heroModalTitle || 'Book Your Free Demo Review'}</h3>
-            <p className={s.modalSub}>{heroModalSub || 'Free Google Meet Demo • june 5, 2026 • Check your email for the link'}</p>
+            <p className={s.modalSub}>{heroModalSub || `Free Google Meet Demo • ${heroDate || 'june 5, 2026'} • Check your email for the link`}</p>
 
             {done ? (
               <div className={s.successBox}>
@@ -313,7 +313,7 @@ export default function CoraLanding({
                 <p className={s.successDesc}>{heroSuccessDesc || 'Registration successful! Check your email for the Google Meet link.'}</p>
               </div>
             ) : (
-              <BookingForm onSuccess={handleSuccess} />
+              <BookingForm onSuccess={handleSuccess} demoDate={heroDate} />
             )}
           </div>
         </div>

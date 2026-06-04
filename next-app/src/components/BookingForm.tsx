@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './BookingForm.module.css'
 
-type Props = { onSuccess?: () => void }
+type Props = { onSuccess?: () => void; demoDate?: string }
 type FormElements = HTMLInputElement | HTMLSelectElement
 
 const COOP_TYPES = [
@@ -28,7 +28,7 @@ const ROLES = [
   'Other Officer',
 ]
 
-export default function BookingForm({ onSuccess }: Props) {
+export default function BookingForm({ onSuccess, demoDate }: Props & { demoDate?: string }) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [success, setSuccess] = useState<boolean | null>(null)
@@ -168,7 +168,7 @@ export default function BookingForm({ onSuccess }: Props) {
         </label>
 
         <label htmlFor="schedule" className={styles.label}>Demo Date
-          <input id="schedule" name="schedule" className={styles.input} value="june 5, 2026" readOnly aria-readonly="true" />
+          <input id="schedule" name="schedule" className={styles.input} value={demoDate || 'june 5, 2026'} readOnly aria-readonly="true" placeholder={demoDate || 'june 5, 2026'} />
         </label>
       </div>
 
